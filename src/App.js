@@ -63,14 +63,12 @@ function App() {
                   </Header>
               }
           >
-<div>
-    <Routes>
-
-        <Route path='/' exact component={Home} />
-        <Route path='/connexion' component={Connexion} />
-
-    </Routes>
-</div>
+        <div>
+            <Routes>
+                <Route path='/' exact component={Home} />
+                <Route path='/connexion' component={Connexion} />
+            </Routes>
+        </div>
           </AppShell>
       </>
   );
