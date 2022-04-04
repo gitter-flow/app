@@ -8,13 +8,17 @@ import {
     Text,
     MediaQuery,
     Burger,
-    useMantineTheme, Textarea, Button, Switch,
+    useMantineTheme, Textarea, Button,
 } from '@mantine/core';
 
 import NavbarHead from "./components/Navbar/NavbarHead";
-import {Link, Route, Router, Routes} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Connexion from "./pages/Connexion/Connexion";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route, Link
+} from "react-router-dom";
 
 function App() {
     const theme = useMantineTheme();
@@ -64,10 +68,12 @@ function App() {
               }
           >
         <div>
-            <Routes>
-                <Route path='/' exact component={Home} />
-                <Route path='/connexion' component={Connexion} />
-            </Routes>
+            <Router>
+                <Switch>
+                <Route exact path='/' component={Home} />
+                <Route exact path='/connexion' component={Connexion} />
+                </Switch>
+            </Router>
         </div>
           </AppShell>
       </>
