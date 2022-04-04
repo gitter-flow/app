@@ -1,0 +1,106 @@
+version: 2.1
+
+parameters:
+  pull_request:
+    type: boolean
+    default: false
+    
+orbs:
+  security-report: dreamquark-ai/security-report@1.0.1
+
+executors:
+  security-report: dreamquark-ai/security-report@1.0.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: node:alpine3.15
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: |
+            npm install
+            npm run build
+      - run:
+          name: Test
+          command: echo "Not implemented yet."
+
+  docker-security:
+    executor: security-report/default
+    working_directory: /root/app
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+          version: 20.10.11
+      - run:
+          name: "Build & pull the images for security report"
+          command: |
+            echo $QUAY_PASSWORD | docker login -u $QUAY_LOGIN --password-stdin quay.io
+            docker pull quay.io/gitter/gitter-app:1.0.0
+            make build-docker-prod TAG_PROD=security-test
+      - security-report/security-report:
+          image: 'quay.io/gitter/gitter-app'
+          base-tag: '1.0.0'
+          new-tag: 'security-test'
+          orga: 'gitter-flow'
+          repo: 'app'
+          topic: 'app-security-report'
+
+  build-docker-dev:
+    docker:
+      - image: quay.io/paulbarrie7/docker:latest
+    working_directory: /root/app
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+          version: 20.10.11
+      - run:
+          name: "Build the image"
+          command: |
+            make build-docker-dev
+
+  deploy-docker:
+    docker:
+      - image: quay.io/paulbarrie7/docker:latest
+    working_directory: /root/app
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+          version: 20.10.11
+      - run:
+          name: "Build the image"
+          command: |
+            make build-docker-prod
+      - run:
+          name: "Deploy the image"
+          command: |
+            echo $QUAY_PASSWORD | docker login -u $QUAY_LOGIN --password-stdin quay.io
+            make deploy-docker-prod
+
+workflows:
+  test:
+    when: << pipeline.parameters.pull_request >>
+    jobs:
+      - build-and-test:
+            context:
+              - ci-gitter
+      - docker-security:
+            context:
+              - ci-gitter
+
+  dev:
+    when: << pipeline.parameters.pull_request >>
+    jobs:
+      - build-docker-dev
+
+  deploy:
+    when: << pipeline.parameters.pull_request >>
+    jobs:
+      - deploy-docker:
+          context:
+            - ci-gitter
+
