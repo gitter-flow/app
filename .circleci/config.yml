@@ -19,10 +19,12 @@ jobs:
       - checkout
       - run:
           name: Build
-          command: npm run build
+          command: |
+            npm install
+            npm run build
       - run:
           name: Test
-          command: echo "Not implemented yet"
+          command: echo "Not implemented yet."
 
   docker-security:
     executor: security-report/default
@@ -37,18 +39,18 @@ jobs:
           command: |
             echo $QUAY_PASSWORD | docker login -u $QUAY_LOGIN --password-stdin quay.io
             docker pull quay.io/gitter/gitter-app:1.0.0
-            make build-docker-prod
+            make build-docker-prod TAG_PROD=security-test
       - security-report/security-report:
           image: 'quay.io/gitter/gitter-app'
           base-tag: '1.0.0'
           new-tag: 'security-test'
-          orga: 'gitter'
+          orga: 'gitter-flow'
           repo: 'app'
           topic: 'app-security-report'
 
   build-docker-dev:
     docker:
-      - image: quay.io/gitter/docker:latest
+      - image: quay.io/paulbarrie7/docker:latest
     working_directory: /root/app
     steps:
       - checkout
@@ -83,6 +85,9 @@ workflows:
   test:
     when: << pipeline.parameters.pull_request >>
     jobs:
+      - build-and-test:
+            context:
+              - ci-gitter
       - docker-security:
             context:
               - ci-gitter
@@ -95,9 +100,6 @@ workflows:
   deploy:
     when: << pipeline.parameters.pull_request >>
     jobs:
-      - build-and-test:
-            context:
-              - ci-gitter
       - deploy-docker:
           context:
             - ci-gitter
