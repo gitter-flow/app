@@ -1,0 +1,11 @@
+{
+    "realm": "gitter",
+    "auth-server-url": "http://localhost:8080/auth/",
+    "ssl-required": "external",
+    "resource": "react-client",
+    "clientId": "react-client",
+    "credentials": {
+      "secret": "E7qE1VdlCd3rwTe9GevxsbnpbL3alShn"
+    },
+    "confidential-port": 0
+  }
