@@ -31,7 +31,7 @@ deploy-docker-prod:
 .PHONY: deploy-docker-prod
 
 run-docker-dev:
-	docker run -p 3000:3000 -v $(pwd):/home/app $(IMAGE):$(TAG_DEV)
+	docker run -p 3000:3000 -v $(PWD):/home/app $(IMAGE):$(TAG_DEV)
 .PHONY: run-docker-dev
 
 run-docker-prod:

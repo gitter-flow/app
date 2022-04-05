@@ -1,83 +1,49 @@
 import './App.css';
 import React, { useState } from 'react';
 import {
-    AppShell,
-    Header,
-    Footer,
-    Aside,
-    Text,
-    MediaQuery,
-    Burger,
-    useMantineTheme, Textarea, Button,
+    useMantineTheme,
 } from '@mantine/core';
 
-import NavbarHead from "./components/Navbar/NavbarHead";
-import Home from "./pages/Home/Home";
-import Connexion from "./pages/Connexion/Connexion";
+import Home from "./containers/Home/Home";
+import Connexion from "./containers/Connexion/Connexion";
+
 import {
     BrowserRouter as Router,
     Switch,
-    Route, Link
+    Route
 } from "react-router-dom";
-import SignUp from "./pages/SignUp/SignUp";
+import SignUp from "./containers/SignUp/SignUp";
+import Navbar from './components/Navbar/Navbar';
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import keycloak from "./services/UserService";
+import { useKeycloak } from "@react-keycloak/web";
+import Welcome from './containers/Welcome/Welcome';
 
 function App() {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
-    return (
-        <>
-            <AppShell
-                styles={{
-                    main: {
-                        background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-                    },
-                }}
-                navbarOffsetBreakpoint="sm"
-                asideOffsetBreakpoint="sm"
-                fixed
-                navbar={
-                    <NavbarHead opened = {opened}/>
-                }
-                aside={
-                    <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
-                        <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-                            <Text>Application sidebar</Text>
-                        </Aside>
-                    </MediaQuery>
-                }
-                footer={
-                    <Footer height={60} p="md">
-                        <Link to="/connexion">connexion</Link>
-                    </Footer>
-                }
-                header={
-                    <Header height={70} p="md">
-                        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-                                <Burger
-                                    opened={opened}
-                                    onClick={() => setOpened((o) => !o)}
-                                    size="sm"
-                                    color={theme.colors.gray[6]}
-                                    mr="xl"
-                                />
-                            </MediaQuery>
-
-                            <Text>Application header</Text>
-                        </div>
-                    </Header>
-                }
-            >
-                <div>
-                    <Router>
-                        <Switch>
+  return (
+      <>
+        <ReactKeycloakProvider authClient={keycloak}>
+            {keycloak.authenticated && <Navbar/>}
+            <div>
+                <Router>
+                    <Switch>
+                        {!keycloak.authenticated && 
+                            <Route exact path='/' component={Welcome} />
+                        }
+                        {!!keycloak.authenticated &&
                             <Route exact path='/' component={Home} />
-                            <Route exact path='/connexion' component={Connexion} />
-                            <Route exact path='/signup' component={SignUp} />
-                        </Switch>
-                    </Router>
-                </div>
-            </AppShell>
+                        }
+                        
+                        <Route exact path='/connexion' component={Connexion} />
+                        <Route exact path='/signup' component={SignUp} />
+                    </Switch>
+                </Router>
+            </div>
+
+        </ReactKeycloakProvider>
+        
         </>
     );
 }
