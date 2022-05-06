@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import { useKeycloak } from "@react-keycloak/web";
 
 export default function Welcome() {
-    const { keycloak, initialized } = useKeycloak();
+    const { keycloak } = useKeycloak();
     return(
         <div>
             <h1>Welcome to Gitter</h1>

@@ -75,11 +75,6 @@ jobs:
           name: "Build the image"
           command: |
             make build-docker-prod
-      - run:
-          name: "Deploy the image"
-          command: |
-            echo $QUAY_PASSWORD | docker login -u $QUAY_LOGIN --password-stdin quay.io
-            make deploy-docker-prod
 
 workflows:
   test:
@@ -91,12 +86,10 @@ workflows:
       - docker-security:
             context:
               - ci-gitter
-
   dev:
     when: << pipeline.parameters.pull_request >>
     jobs:
       - build-docker-dev
-
   deploy:
     when: << pipeline.parameters.pull_request >>
     jobs:

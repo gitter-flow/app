@@ -1,6 +1,6 @@
 {
   "realm": "gitter",
-  "url": "http://localhost:8081/auth/",
+  "url": "http://localhost:8080/auth/",
   "ssl-required": "external",
   "clientId": "gitter-app",
   "credentials": {
