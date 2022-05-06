@@ -1,0 +1,16 @@
+name: Continuous integration on master branch
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy_docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build prod image
+      run: |
+        make build-docker-prod TAG_PROD=latest
+        echo ${{ secrets.QUAY_PASSWORD }} | docker login -u ${{ secrets.QUAY_LOGIN }} --password-stdin quay.io
+        make deploy-docker-prof TAG_PROD=latest
