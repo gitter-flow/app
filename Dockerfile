@@ -1,13 +1,11 @@
 FROM node:lts-alpine3.15
 
-USER root
+USER node
 WORKDIR /home/app
 
 COPY package.json .
 
 RUN npm install 
-
-COPY . .
 
 
 EXPOSE 3000

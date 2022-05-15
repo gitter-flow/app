@@ -1,13 +1,14 @@
-import Button from '@mui/material/Button';
-import { useKeycloak } from "@react-keycloak/web";
+import UserService from "../../services/UserService";
 
-export default function Welcome() {
-    const { keycloak } = useKeycloak();
-    return(
-        <div>
-            <h1>Welcome to Gitter</h1>
-            <Button variant='contained' onClick={() => keycloak.login()}> Login </Button>
-            <Button variant='outlined' onClick={() => keycloak.register()}> Register </Button> 
-        </div>
-    )
-}
+const Welcome = () => (
+  <div className="jumbotron">
+    <h1>Welcome on Gitter!</h1>
+    <p className="lead">Please login or get registerd!</p>
+    <p>
+      <button className="btn btn-lg btn-warning" onClick={() => UserService.doLogin()}>Login</button>
+      <button className="btn btn-lg btn-warning" onClick={() => UserService.doRegister()}>Register</button>
+    </p>
+  </div>
+)
+
+export default Welcome

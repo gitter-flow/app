@@ -1,15 +1,21 @@
-import {Button} from "@mantine/core";
-import Navbar from "../../components/Navbar/Navbar";
+import { Routes, Route } from "react-router-dom";
+import Profile from "../../components/Profile";
+import PublicationForm from "../../components/PublicationForm";
+import News from "../../components/News";
+import Menu from "../Menu/Menu";
+import NoMatch from "../../components/NoMatch";
 
-function Home() {
-    return (
-    <div>
-        <Navbar/>
-        <textarea cols="30" rows="15" style={{ width: '800px', height: '407px', resize : 'none'}} ></textarea>
 
-        <Button> Executer</Button>
-    </div>
-    );
-}
+const Home = () => (
+  <>
+    <Menu/>
+        <Routes>
+          <Route exact path="/" element={<News/>}/>
+          <Route exact path="/publication/new" element={<PublicationForm/>}/>
+          <Route path="/profile/:userId" element={<Profile bookId="1"/>}/>
+          <Route path="*" element={<NoMatch/>}/>
+      </Routes>
+  </>
+)
 
-export default Home
+export default Home;

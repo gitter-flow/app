@@ -1,30 +1,26 @@
-import './App.css';
-import React from 'react';
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import Home from "./containers/Home/Home";
+import StoreService from "./services/StoreService";
+import RenderOnAnonymous from "./components/RenderOnAnonymous";
+import RenderOnAuthenticated from "./components/RenderOnAuthenticated";
+import Welcome from "./containers/Welcome/Welcome";
 
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route
-} from "react-router-dom";
-import Welcome from './containers/Welcome/Welcome';
+const store = StoreService.setup();
 
-function App() {
-  return (
-      <>
-        {/* <ReactKeycloakProvider authClient={keycloak}> */}
-            <div>
-                <Router>
-                    <Switch>
-                        <Route  path='/home' component={Welcome} />
-                        {/* <PrivateRoute  path='/' component={Home} /> */}
-                    </Switch>
-                </Router>
-            </div>
-
-        {/* </ReactKeycloakProvider> */}
-
-        </>
-    );
-}
+const App = () => (
+  <Provider store={store}>
+    <BrowserRouter>
+      <div className="container">
+        <RenderOnAnonymous>
+          <Welcome/>
+        </RenderOnAnonymous>
+        <RenderOnAuthenticated>
+          <Home/>
+        </RenderOnAuthenticated>
+      </div>
+    </BrowserRouter>
+  </Provider>
+);
 
 export default App;

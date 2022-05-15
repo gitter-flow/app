@@ -1,0 +1,8 @@
+{
+  "realm": "gitter-realm",
+  "auth-server-url": "https://dev.gitter.uk/auth/",
+  "ssl-required": "external",
+  "resource": "react-app-auth",
+  "public-client": true,
+  "confidential-port": 0
+}
