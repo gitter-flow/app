@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { allBooks } from '../modules/books';
 
-const BookDetails = () => {
+const Profile = () => {
 
   const { bookId } = useParams();
   const dispatch = useDispatch();
@@ -37,4 +37,4 @@ const BookDetails = () => {
   ) : null
 }
 
-export default BookDetails
+export default Profile

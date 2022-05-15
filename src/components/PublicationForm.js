@@ -2,9 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { addBook } from "../modules/books";
-import RenderOnRole from "./RenderOnRole";
 
-const BookForm = () => {
+const PublicationForm = () => {
 
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
@@ -36,13 +35,12 @@ const BookForm = () => {
             <input type="text" className="form-control" placeholder="Title"
                    value={title} onChange={(e) => setTitle(e.target.value)}/>
           </div>
-          <RenderOnRole roles={['user']}>
-            <button type="submit" className="btn btn-primary">Add book</button>
-          </RenderOnRole>
+          <button type="submit" className="btn btn-primary">Publish</button>
+
         </form>
       </div>
     </div>
   );
 }
 
-export default BookForm
+export default PublicationForm;

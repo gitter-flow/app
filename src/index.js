@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import App from "./containers/App";
+import App from "./App";
 import HttpService from "./services/HttpService";
 import UserService from "./services/UserService";
 
