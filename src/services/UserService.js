@@ -28,6 +28,8 @@ const doRegister = _kc.register
 
 const doLogin = _kc.login;
 
+const doSettings = _kc.accountManagement;
+
 const doLogout = _kc.logout;
 
 const getToken = () => _kc.token;
@@ -47,6 +49,7 @@ const UserService = {
   initKeycloak,
   doLogin,
   doRegister,
+  doSettings,
   doLogout,
   isLoggedIn,
   getToken,

@@ -100,7 +100,7 @@ export default function NavBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={() => navigate("/profile/1")}>Profile</MenuItem>
-      <MenuItem onClick={() => navigate("/settings")}>Settings</MenuItem>
+      <MenuItem onClick={() => UserService.doSettings()}>Settings</MenuItem>
       <MenuItem onClick={() => UserService.doLogout()}>Logout</MenuItem>
     </Menu>
   );
