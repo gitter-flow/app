@@ -5,17 +5,36 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ListItemButton from '@mui/material/ListItemButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import ReplyIcon from '@mui/icons-material/Reply';
+import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
+
+import Editor from "@monaco-editor/react";
+import { Button } from '@mui/material';
+
 
 
 const Publication = (props) => {
     const [open, setOpen] = React.useState(true);
-
+    const [like, setLike] = React.useState(true);
+    const [fork, setFork] = React.useState(true);
+    const [version, setVersion] = React.useState(["version", "orange", "cherry"]);
+    const [contentMarkdown, setContentMarkdown] = React.useState('') 
     const handleClick = () => {
         setOpen(!open);
+    };
+    const FavHandleClick = () => {
+        setLike(!like);
+    };
+    const ForkHandleClick = () => {
+       
+    };
+    const ShareHandleClick = () => {
+       
     };
     return (
         <>
@@ -32,14 +51,53 @@ const Publication = (props) => {
                 }  
             />
         </ListItem>
-        <ListItemButton onClick={handleClick}>
-            <ListItemIcon onClick={handleClick}>
+     <List>
+        <ListItemButton style={{transitionDuration: '0s',alignItems:'center'}} >
+            <ListItemIcon >
+                 {open ? <ExpandLess onClick={handleClick} /> : <ExpandMore onClick={handleClick} />}
             </ListItemIcon>
-            {open ? <ExpandLess /> : <ExpandMore />}
+            <ListItemIcon >
+                 {fork ? <ForkLeftSharpIcon onClick={FavHandleClick} /> : <ForkLeftSharpIcon  onClick={ForkHandleClick} />}
+            </ListItemIcon>
+            <ListItemIcon >
+                 {like ? <FavoriteIcon onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}
+            </ListItemIcon>
+            <ListItemIcon style={{textAlign:''}}>
+                 {<ReplyIcon  onClick={ShareHandleClick} />}
+            </ListItemIcon>
+            <ListItemIcon style={{textAlign:''}}>
+                   <select name="version">
+                            <option value="">version</option>
+                            
+                    </select>               
+            </ListItemIcon>
+            
         </ListItemButton>
+     </List>
+      
+      
+        
+        
         <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-                <h1> Show code</h1>
+                
+            <Editor
+                height={400}
+                defaultLanguage="javascript"
+                defaultValue=""
+                theme='vs-dark'
+                onChange={(value) => setContentMarkdown(value)}
+               
+            />
+           <Button variant="contained" >
+                Sauvegarder
+            </Button>
+            <Button variant="contained" style={{alignContent:'center'}}>
+                Execution
+            </Button>
+
+
+
             </List>
         </Collapse>
     </>
