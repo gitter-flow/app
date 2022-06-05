@@ -22,7 +22,7 @@ const Publication = (props) => {
     const [open, setOpen] = React.useState(true);
     const [like, setLike] = React.useState(true);
     const [fork, setFork] = React.useState(true);
-    const [userId, setUserId] = React.useState("");
+    const [userId, setUserId] = React.useState("2");
     const [publicationId, setPublicationId] = React.useState("");
     const [version, setVersion] = React.useState(["version1","version2","version3"]);
     const [contentMarkdown, setContentMarkdown] = React.useState('')
@@ -42,7 +42,6 @@ const Publication = (props) => {
       console.log(userId)
       console.log(publicationId)
     };
-    const isOwner = props.userId == "1" // replace with cookie value
     return (
         <>
         <ListItem alignItems="flex-start">
@@ -91,7 +90,7 @@ const Publication = (props) => {
             <EditorComponent
                 height={400}
                 defaultLanguage={props.typeCode}
-                readOnly={!isOwner}
+                userId={userId}
                 defaultValue=""
                 theme='vs-dark'
                 onChange={(value) => setContentMarkdown(value)}

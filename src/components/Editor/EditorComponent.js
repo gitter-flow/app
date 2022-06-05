@@ -11,10 +11,10 @@ const EditorComponent = (props) => {
     <Editor
                 height={props.height} //400
                 defaultLanguage={props.typeCode}
-                readOnly={!isOwner}
                 defaultValue={props.defaultValue}
                 theme={props.theme}
                 onChange={(value) => setContent(value)}
+                options={{readOnly: !isOwner}}
 
             />
             <Button variant="contained" >
