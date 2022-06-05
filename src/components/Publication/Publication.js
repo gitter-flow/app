@@ -13,27 +13,34 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
 import EditorComponent from "../Editor/EditorComponent";
+import Commentary from "../Commentary/Commentary";
+import AddCommentary from "../Commentary/AddCommentary";
 
 
 
 const Publication = (props) => {
     const [open, setOpen] = React.useState(true);
     const [like, setLike] = React.useState(true);
+    const [fork, setFork] = React.useState(true);
     const [userId, setUserId] = React.useState("");
     const [publicationId, setPublicationId] = React.useState("");
-    const [version, setVersion] = React.useState([]);
+    const [version, setVersion] = React.useState(["version1","version2","version3"]);
     const [contentMarkdown, setContentMarkdown] = React.useState('')
+
     const handleClick = () => {
         setOpen(!open);
     };
     const FavHandleClick = () => {
-        setLike(!like);
+        setLike(!like)
+      console.log(userId)
+      console.log(publicationId)
     };
     const ForkHandleClick = () => {
-
+      setFork(!fork)
     };
     const ShareHandleClick = () => {
-
+      console.log(userId)
+      console.log(publicationId)
     };
     const isOwner = props.userId == "1" // replace with cookie value
     return (
@@ -57,17 +64,17 @@ const Publication = (props) => {
                  {open ? <ExpandLess onClick={handleClick} /> : <ExpandMore onClick={handleClick} />}
             </ListItemIcon>
             <ListItemIcon >
-                 {<ForkLeftSharpIcon onClick={ForkHandleClick} />}
+                 {fork ? <ForkLeftSharpIcon onClick={ForkHandleClick} />: <ForkLeftSharpIcon style={{color: 'blue' }}onClick={ForkHandleClick} />}
             </ListItemIcon>
             <ListItemIcon >
-                 {like ? <FavoriteIcon onClick={FavHandleClick(userId,publicationId)} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick(userId,publicationId)} />}
+                 {like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}
             </ListItemIcon>
             <ListItemIcon style={{textAlign:''}}>
                  {<ReplyIcon  onClick={ShareHandleClick} />}
             </ListItemIcon>
             <ListItemIcon style={{textAlign:''}}>
                    <select name="version">
-                            <option value="">version</option>
+                     {version.map((currElement, index) => <option key={currElement} value={version[index]}>{version[index]}</option>)}
 
                     </select>
             </ListItemIcon>
@@ -92,6 +99,8 @@ const Publication = (props) => {
             />
 
             </List>
+          <Commentary label={"username"} id={"1"}/>
+          <AddCommentary buttonVisibility={fork} publicationId={"publicationId"} userId={"userId"}  />
         </Collapse>
     </>
     );
