@@ -22,7 +22,6 @@ const Publication = (props) => {
     const [open, setOpen] = React.useState(true);
     const [like, setLike] = React.useState(true);
     const [fork, setFork] = React.useState(true);
-    const [userId, setUserId] = React.useState("2");
     const [publicationId, setPublicationId] = React.useState("");
     const [version, setVersion] = React.useState(["version1","version2","version3"]);
     const [contentMarkdown, setContentMarkdown] = React.useState('')
@@ -32,14 +31,14 @@ const Publication = (props) => {
     };
     const FavHandleClick = () => {
         setLike(!like)
-      console.log(userId)
+      console.log(props.userId)
       console.log(publicationId)
     };
     const ForkHandleClick = () => {
       setFork(!fork)
     };
     const ShareHandleClick = () => {
-      console.log(userId)
+      console.log(props.userId)
       console.log(publicationId)
     };
     return (
@@ -74,7 +73,6 @@ const Publication = (props) => {
             <ListItemIcon style={{textAlign:''}}>
                    <select name="version">
                      {version.map((currElement, index) => <option key={currElement} value={version[index]}>{version[index]}</option>)}
-
                     </select>
             </ListItemIcon>
 
@@ -88,17 +86,19 @@ const Publication = (props) => {
             <List component="div" disablePadding>
 
             <EditorComponent
-                height={400}
-                defaultLanguage={props.typeCode}
-                userId={userId}
+                height={props.height}
+                //defaultLanguage={props.typeCode}
+                userId={props.userId}
                 defaultValue=""
                 theme='vs-dark'
+                typeCode={props.typeCode}
                 onChange={(value) => setContentMarkdown(value)}
+                addPublication = {props.addPublication}
 
             />
 
             </List>
-          <Commentary label={"username"} id={"1"}/>
+          <Commentary label={"username"} id={props.userId}/>
           <AddCommentary buttonVisibility={fork} publicationId={"publicationId"} userId={"userId"}  />
         </Collapse>
     </>
