@@ -12,18 +12,17 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
-
-import Editor from "@monaco-editor/react";
-import { Button } from '@mui/material';
+import EditorComponent from "../Editor/EditorComponent";
 
 
 
 const Publication = (props) => {
     const [open, setOpen] = React.useState(true);
     const [like, setLike] = React.useState(true);
-    const [fork, setFork] = React.useState(true);
-    const [version, setVersion] = React.useState(["version", "orange", "cherry"]);
-    const [contentMarkdown, setContentMarkdown] = React.useState('') 
+    const [userId, setUserId] = React.useState("");
+    const [publicationId, setPublicationId] = React.useState("");
+    const [version, setVersion] = React.useState([]);
+    const [contentMarkdown, setContentMarkdown] = React.useState('')
     const handleClick = () => {
         setOpen(!open);
     };
@@ -31,11 +30,12 @@ const Publication = (props) => {
         setLike(!like);
     };
     const ForkHandleClick = () => {
-       
+
     };
     const ShareHandleClick = () => {
-       
+
     };
+    const isOwner = props.userId == "1" // replace with cookie value
     return (
         <>
         <ListItem alignItems="flex-start">
@@ -48,7 +48,7 @@ const Publication = (props) => {
                 <React.Fragment>
                     {props.content}
                 </React.Fragment>
-                }  
+                }
             />
         </ListItem>
      <List>
@@ -57,10 +57,10 @@ const Publication = (props) => {
                  {open ? <ExpandLess onClick={handleClick} /> : <ExpandMore onClick={handleClick} />}
             </ListItemIcon>
             <ListItemIcon >
-                 {fork ? <ForkLeftSharpIcon onClick={FavHandleClick} /> : <ForkLeftSharpIcon  onClick={ForkHandleClick} />}
+                 {<ForkLeftSharpIcon onClick={ForkHandleClick} />}
             </ListItemIcon>
             <ListItemIcon >
-                 {like ? <FavoriteIcon onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}
+                 {like ? <FavoriteIcon onClick={FavHandleClick(userId,publicationId)} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick(userId,publicationId)} />}
             </ListItemIcon>
             <ListItemIcon style={{textAlign:''}}>
                  {<ReplyIcon  onClick={ShareHandleClick} />}
@@ -68,35 +68,28 @@ const Publication = (props) => {
             <ListItemIcon style={{textAlign:''}}>
                    <select name="version">
                             <option value="">version</option>
-                            
-                    </select>               
+
+                    </select>
             </ListItemIcon>
-            
+
         </ListItemButton>
      </List>
-      
-      
-        
-        
+
+
+
+
         <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-                
-            <Editor
+
+            <EditorComponent
                 height={400}
-                defaultLanguage="javascript"
+                defaultLanguage={props.typeCode}
+                readOnly={!isOwner}
                 defaultValue=""
                 theme='vs-dark'
                 onChange={(value) => setContentMarkdown(value)}
-               
+
             />
-           <Button variant="contained" >
-                Sauvegarder
-            </Button>
-            <Button variant="contained" style={{alignContent:'center'}}>
-                Execution
-            </Button>
-
-
 
             </List>
         </Collapse>
