@@ -9,6 +9,7 @@ const EditorComponent = (props) => {
     const addPublication = props.addPublication? "none" : "visible"
     const readOnly = (addPublication==="none" || isOwner)
     const executionPublication = props.addPublication? "visible" : "none"
+    const [typeCode, setTypeCode] = React.useState(["c","c#","java"]);
 
   const AddThisPublication=()=>{
       console.log(props.userId)
@@ -31,9 +32,16 @@ const EditorComponent = (props) => {
             <Button variant="contained" style={{display:addPublication}} onClick={ExecutionPublication} >
               Execution
             </Button>
-            <Button variant="contained" style={{display:executionPublication}} onClick={AddThisPublication}>
+
+        <div style={{display:executionPublication}}>
+            <Button variant="contained"  onClick={AddThisPublication}>
+
               Add publication
             </Button>
+            <select name="typeCode">
+              {typeCode.map((currElement, index) => <option key={currElement} value={typeCode[index]}>{typeCode[index]}</option>)}
+            </select>
+        </div>
       </>
     );
 }
