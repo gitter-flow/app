@@ -13,13 +13,13 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
 import EditorComponent from "../Editor/EditorComponent";
-import Commentary from "../Commentary/Commentary";
-import AddCommentary from "../Commentary/AddCommentary";
+import Commentarys from "../Commentary/Commentarys";
+import {Button} from "@mui/material";
 
 
 
 const Publication = (props) => {
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
     const [like, setLike] = React.useState(true);
     const [fork, setFork] = React.useState(true);
     const [publicationId, setPublicationId] = React.useState("");
@@ -65,7 +65,8 @@ const Publication = (props) => {
                  {fork ? <ForkLeftSharpIcon onClick={ForkHandleClick} />: <ForkLeftSharpIcon style={{color: 'blue' }}onClick={ForkHandleClick} />}
             </ListItemIcon>
             <ListItemIcon >
-                 {like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}
+                 {like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} /> }
+                 {like ? props.like :props.like+1}
             </ListItemIcon>
             <ListItemIcon style={{textAlign:''}}>
                  {<ReplyIcon  onClick={ShareHandleClick} />}
@@ -82,7 +83,7 @@ const Publication = (props) => {
 
 
 
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={open} timeout="auto"  unmountOnExit>
             <List component="div" disablePadding>
 
             <EditorComponent
@@ -92,15 +93,16 @@ const Publication = (props) => {
                 defaultValue=""
                 theme='vs-dark'
                 typeCode={props.typeCode}
+                content={props.content}
                 onChange={(value) => setContentMarkdown(value)}
                 addPublication = {props.addPublication}
 
             />
 
             </List>
-          <Commentary label={"username"} id={props.userId}/>
-          <AddCommentary buttonVisibility={fork} publicationId={"publicationId"} userId={"userId"}  />
+          <Commentarys publicationId={publicationId} label={"username"} id={props.userId}/>
         </Collapse>
+
     </>
     );
 }

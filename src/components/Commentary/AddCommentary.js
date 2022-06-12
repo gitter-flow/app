@@ -4,7 +4,6 @@ const AddCommentary = (props) => {
   const [content, setContent] = React.useState("");
   const userId = props.userId  // replace with cookie value
   const publicationId = props.publicationId
-  const buttonVisibility = props.buttonVisibility ? "Hidden" : "visible"
 
   const AddThisCommentary = () => {
     console.log(publicationId)
@@ -12,14 +11,17 @@ const AddCommentary = (props) => {
     console.log(content)
   };
   return(  <>
-      <br/>
-      <br/>
-      <br/>
-      <TextField  style={{visibility: buttonVisibility}} label={props.label} id="fullWidth"  onChange={(e) => setContent(e.target.value)} />
-      <br/>
-      <Button style={{visibility: buttonVisibility}} onClick={AddThisCommentary}>Add Commentary</Button>
-      <br/>
-      <br/>
+      <form>
+        <div>
+          <label> message : </label>
+        </div>
+        <div>
+          <textarea label="Enter your message" id="fullWidth"  onChange={(e) => setContent(e.target.value)} />
+        </div>
+        <div>
+          <Button  onClick={AddThisCommentary}>Create Commentary</Button>
+        </div>
+      </form>
     </>
   );
 }

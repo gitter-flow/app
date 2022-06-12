@@ -15,8 +15,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { useNavigate } from "react-router-dom";
 import UserService from '../../services/UserService';
+import {useNavigate} from "react-router-dom";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -64,7 +64,7 @@ export default function NavBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  let userId = "1";
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -83,6 +83,7 @@ export default function NavBar() {
   };
   let navigate = useNavigate();
   const menuId = 'primary-search-account-menu';
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -99,7 +100,7 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => navigate("/profile/1")}>Profile</MenuItem>
+      <MenuItem onClick={() => navigate(`/profile/${userId}`)}>Profile</MenuItem>
       <MenuItem onClick={() => UserService.doSettings()}>Settings</MenuItem>
       <MenuItem onClick={() => UserService.doLogout()}>Logout</MenuItem>
     </Menu>
