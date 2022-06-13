@@ -5,17 +5,41 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ListItemButton from '@mui/material/ListItemButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import ReplyIcon from '@mui/icons-material/Reply';
+import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
+import EditorComponent from "../Editor/EditorComponent";
+import Commentarys from "../Commentary/Commentarys";
+import {Button} from "@mui/material";
+
 
 
 const Publication = (props) => {
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
+    const [like, setLike] = React.useState(true);
+    const [fork, setFork] = React.useState(true);
+    const [publicationId, setPublicationId] = React.useState("");
+    const [version, setVersion] = React.useState(["version1","version2","version3"]);
+    const [contentMarkdown, setContentMarkdown] = React.useState('')
 
     const handleClick = () => {
         setOpen(!open);
+    };
+    const FavHandleClick = () => {
+        setLike(!like)
+      console.log(props.userId)
+      console.log(publicationId)
+    };
+    const ForkHandleClick = () => {
+      setFork(!fork)
+    };
+    const ShareHandleClick = () => {
+      console.log(props.userId)
+      console.log(publicationId)
     };
     return (
         <>
@@ -29,19 +53,56 @@ const Publication = (props) => {
                 <React.Fragment>
                     {props.content}
                 </React.Fragment>
-                }  
+                }
             />
         </ListItem>
-        <ListItemButton onClick={handleClick}>
-            <ListItemIcon onClick={handleClick}>
+     <List>
+        <ListItemButton style={{transitionDuration: '0s',alignItems:'center'}} >
+            <ListItemIcon >
+                 {open ? <ExpandLess onClick={handleClick} /> : <ExpandMore onClick={handleClick} />}
             </ListItemIcon>
-            {open ? <ExpandLess /> : <ExpandMore />}
+            <ListItemIcon >
+                 {fork ? <ForkLeftSharpIcon onClick={ForkHandleClick} />: <ForkLeftSharpIcon style={{color: 'blue' }}onClick={ForkHandleClick} />}
+            </ListItemIcon>
+            <ListItemIcon >
+                 {like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} /> }
+                 {like ? props.like :props.like+1}
+            </ListItemIcon>
+            <ListItemIcon style={{textAlign:''}}>
+                 {<ReplyIcon  onClick={ShareHandleClick} />}
+            </ListItemIcon>
+            <ListItemIcon style={{textAlign:''}}>
+                   <select name="version">
+                     {version.map((currElement, index) => <option key={currElement} value={version[index]}>{version[index]}</option>)}
+                    </select>
+            </ListItemIcon>
+
         </ListItemButton>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+     </List>
+
+
+
+
+        <Collapse in={open} timeout="auto"  unmountOnExit>
             <List component="div" disablePadding>
-                <h1> Show code</h1>
+
+            <EditorComponent
+                height={props.height}
+                //defaultLanguage={props.typeCode}
+                userId={props.userId}
+                defaultValue=""
+                theme='vs-dark'
+                typeCode={props.typeCode}
+                content={props.content}
+                onChange={(value) => setContentMarkdown(value)}
+                addPublication = {props.addPublication}
+
+            />
+
             </List>
+          <Commentarys publicationId={publicationId} label={"username"} id={props.userId}/>
         </Collapse>
+
     </>
     );
 }

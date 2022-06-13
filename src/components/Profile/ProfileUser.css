@@ -1,0 +1,74 @@
+body {
+  background:#eee;
+}
+
+html,
+body,
+.view {
+  height:100%;
+}
+
+.navbar-brand {
+  color:#fff !important;
+}
+
+.profile-photo {
+  width:100px;
+  height:auto;
+  border-radius: 50%;
+}
+.profile-name {
+  font-size: 140%;
+  font-weight: 300;
+}
+.profile-button {
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.25;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #33b5e5;
+  color: #09C!important;
+}
+.flex-menu {
+  display:flex;
+}
+
+.flex-menu li:not(:last-child) {
+  margin-right:40px;
+}
+ul {
+  padding: 0;
+}
+ul, ul li {
+  list-style-type: none;
+}
+dl, ol, ul {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+*, ::after, ::before {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+}
+body {
+  overflow: auto!important;
+  font-family: Roboto,sans-serif;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #373a3c;
+  background-color: #fff;
+}
+
