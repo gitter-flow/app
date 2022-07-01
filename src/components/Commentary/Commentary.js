@@ -12,32 +12,32 @@ import EditCommentary from "./EditCommentary";
 
 const Commentary = (props) => {
   const [content, setContent] = React.useState("");
-  const isOwner = props.id === "userId" // replace with cookie value
-  const buttonVisibility = isOwner ? "visible" : "hidden"
+  // const isOwner = props.id === "userId" // replace with cookie value
+  // const buttonVisibility = isOwner ? "visible" : "hidden"
   const [edit, setEdit] = React.useState(false);
 
   const [like, setLike] = React.useState(true);
 
   const FavHandleClick = () => {
     setLike(!like)
-    console.log(props.id)
-    console.log(props.commentaryId)
-    console.log(buttonVisibility)
-    console.log(isOwner)
+    // console.log(props.id)
+    // console.log(props.commentaryId)
+    // console.log(buttonVisibility)
+    // console.log(isOwner)
   };
 
   const EditThisCommentary = () => {
     setEdit(!edit)
-    console.log(props.commentaryId)
+    // console.log(props.commentaryId)
     console.log(props.content)
-    console.log(buttonVisibility)
+    // console.log(buttonVisibility)
   };
   const editHidden = () => {
     setEdit(!edit)
   };
   return(
     <>
-      {edit ? <EditCommentary publicationId={"userId"} content={props.content} commentaryId={props.commentaryId} userId={"userId"}/> : null}
+      {/*{edit ? <EditCommentary publicationId={"userId"} content={props.content} commentaryId={props.commentaryId} userId={"userId"}/> : null}*/}
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src={props.img} />
@@ -45,6 +45,8 @@ const Commentary = (props) => {
         <ListItemText
           secondary={
             <React.Fragment>
+              {props.author }
+              <br/>
               <Typography
                 sx={{ display: 'inline' }}
                 component="span"
@@ -53,13 +55,11 @@ const Commentary = (props) => {
               > {props.content} &nbsp;
 
               </Typography>
-              <br/>
-              {props.author }
             </React.Fragment>
 
           }
         />
-        <Button  style={{visibility:buttonVisibility}} onClick={EditThisCommentary}>Edit</Button>{ like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}{like ? props.like :props.like+1}
+        {/*<Button  style={{visibility:buttonVisibility}} onClick={EditThisCommentary}>Edit</Button>{ like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}{like ? props.like :props.like+1}*/}
       </ListItem>
       <Divider variant="inset" component="li" />
 

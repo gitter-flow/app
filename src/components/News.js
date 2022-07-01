@@ -1,16 +1,46 @@
 import * as React from 'react';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import Publication from './Publication/Publication';
 import AddPublication from "./Publication/AddPublication";
 import {Button} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import { useState, useEffect } from 'react';
+import axios from "axios";
+import { useCookies } from 'react-cookie';
 
 
+
+const style_modal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function News() {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [dataPublication, setDataPublication] = React.useState( [
+    {
+      "author": "Paul 2",
+      "content": "Ici le commentaire d'une publication",
+      "typeCode": "c",
+      "userId": "1",
+      "likes":[]
+    },
+  ]);
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -19,30 +49,74 @@ export default function News() {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
+
+  useEffect(() => {
+
+    let options = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+    }
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/publication/all?page=0&size=10`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none":"none"}
+    })
+      .then(value => {
+        console.log("here");
+        setDataPublication(value.data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+  }, []);
+
   return (
-    <List sx={{ width: '80%', bgcolor: 'background.paper' }}>
-     <Divider variant="inset" component="li" />
-
-
-      <Grid container spacing={3}>
-        <Grid item xs>
-          <Item>
-            <Button onClick={AddPublication}> Add Publication</Button>
-            <AddPublication  height={400} typeCode="c" userId="2" addPublication={true}/>
+    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      {/*<Divider variant="inset" component="li" />*/}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style_modal}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <u>Nouvelle publication</u>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <AddPublication typeCode="c" addPublication={true}/>
+          </Typography>
+        </Box>
+      </Modal>
+      <Grid container spacing={2}>
+        <Grid item xs={2}>
+          <Item onClick={handleOpen} style={{"cursor": "pointer"}}>
+            <Button onClick={handleOpen}>Nouvelle publication</Button>
           </Item>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={10}>
           <Item>
-      <Publication height={400} author="Filobedo" content="J'ai fais ce super code les gars !" typeCode="c" userId="15" like={50}/>
-      <Publication height={400} author="Filobedo" content="J'ai fais ce super code les gars !" typeCode="c" userId="15" like={50}/>
-      <Publication height={400} author="Filobedo" content="J'ai fais ce super code les gars !" typeCode="c" userId="15" like={50}/>
-    </Item>
-</Grid>
-  <Grid item xs>
-  </Grid>
-</Grid>
-
+            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} content={curr.content} typeCode={"c"} userId={curr.userId} like={curr.likes}/>)}
+          </Item>
+        </Grid>
+      </Grid>
 
     </List>
   );
 }
+
+// "id": "1c50930c-f92d-4e2e-95f9-1fb0804e2cbf",
+//   "username": "f@gmail.com",
+//   "userId": "ee70149e-64c3-4772-942e-9017c32a8477",
+//   "content": "this is the second publication ! ",
+//   "createdAt": "2022-06-21 17:14:37.637",
+//   "codeId": null,
+//   "sharedPublicationId": null,
+//   "parentPublicationId": null,
+//   "likes": []

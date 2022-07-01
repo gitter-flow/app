@@ -4,17 +4,19 @@ import EditorComponent from "../Editor/EditorComponent";
 
 const AddPublication = (props) => {
   const [content, setContent] = React.useState("");
+
+
+
   return (
     <>
       <div>
-        <label> message : </label>
+        <label> Message : </label>
       </div>
       <div>
-        <textarea label="Enter your message" id="fullWidth"  onChange={(e) => setContent(e.target.value)} />
+        <textarea label="Enter your message" id=""  onChange={(e) => setContent(e.target.value)} style={{"min-width":"-webkit-fill-available","max-width":"-webkit-fill-available", "min-height":"4em", "max-height":"7em"}}/>
       </div>
       <EditorComponent
         height={props.height}
-        userId={props.userId}
         defaultValue=""
         theme='vs-dark'
         typeCode={props.typeCode}

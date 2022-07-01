@@ -2,6 +2,7 @@ import Keycloak from "keycloak-js";
 
 const _kc = new Keycloak('/keycloak.json');
 
+
 /**
  * Initializes Keycloak instance and calls the provided callback function if successfully authenticated.
  *
@@ -18,6 +19,8 @@ const initKeycloak = (onAuthenticatedCallback) => {
         console.log("user is not authenticated..!");
       } else {
         console.log("user is authenticated..!");
+        document.cookie = "keycloaktoken=" + _kc.token;
+        document.cookie = "userId=" + getuserId();
       }
       onAuthenticatedCallback();
     })
@@ -43,6 +46,8 @@ const updateToken = (successCallback) =>
 
 const getUsername = () => _kc.tokenParsed?.preferred_username;
 
+const getuserId = () => _kc.tokenParsed.sub;
+
 const hasRole = (roles) => roles.some((role) => _kc.hasRealmRole(role));
 
 const UserService = {
@@ -55,6 +60,7 @@ const UserService = {
   getToken,
   updateToken,
   getUsername,
+  getuserId,
   hasRole,
 };
 
