@@ -13,6 +13,7 @@ const configure = () => {
   _axios.interceptors.request.use((config) => {
     if (UserService.isLoggedIn()) {
       const cb = () => {
+        console.log("func updater token passed...");
         config.headers.Authorization = `Bearer ${UserService.getToken()}`;
         return Promise.resolve(config);
       };

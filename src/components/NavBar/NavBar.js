@@ -100,7 +100,8 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => navigate(`/profile/${userId}`)}>Profile</MenuItem>
+      <MenuItem onClick={() => navigate(`/`)}><p>Accueil</p></MenuItem>
+      <MenuItem onClick={() => navigate(`/myprofile`)}>Profile</MenuItem>
       <MenuItem onClick={() => UserService.doSettings()}>Settings</MenuItem>
       <MenuItem onClick={() => UserService.doLogout()}>Logout</MenuItem>
     </Menu>
@@ -123,6 +124,7 @@ export default function NavBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+      <MenuItem onClick={() => navigate(`/myprofile`)}><p>Accueil</p></MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}><p>Profile</p></MenuItem>
       <MenuItem onClick={() => UserService.doLogout()}>Logout</MenuItem>
     </Menu>
@@ -132,15 +134,6 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h6"
             noWrap
