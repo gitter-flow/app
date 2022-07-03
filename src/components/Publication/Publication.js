@@ -15,7 +15,6 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
 import EditorComponent from "../Editor/EditorComponent";
-import Commentaries from "../Commentary/Commentaries";
 import Commentary from "../Commentary/Commentary";
 import FollowUser from "./FollowUser";
 import {Button} from "@mui/material";
@@ -170,6 +169,7 @@ const Publication = (props) => {
             content={props.content}
             onChange={(value) => setContentMarkdown(value)}
             addPublication = {props.addPublication}
+            publicationId={props.publicationId}
           />
 
         </List>

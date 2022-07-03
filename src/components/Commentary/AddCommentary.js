@@ -1,28 +1,62 @@
 import * as React from 'react';
 import {Button, TextField} from "@mui/material";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
+import { useCookies } from 'react-cookie';
+
+const style_modal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
 const AddCommentary = (props) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [content, setContent] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const userId = props.userId  // replace with cookie value
   const publicationId = props.publicationId
 
   const AddThisCommentary = () => {
-    console.log("commentary");
-    console.log(publicationId)
-    console.log(userId)
-    console.log(content)
+    fetch(`${process.env.REACT_APP_API_URL}/comment`, {
+      "headers": {
+        "accept": "application/json",
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+        "content-type": "application/json",
+      },
+      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"content\":\"" + content + "\",\"publicationId\":\"" + props.publicationId + "\"}",
+      "method": "POST"
+    });
+    handleClose();
   };
-  return(  <>
-      <form>
-        <div>
-          <label> message : </label>
-        </div>
-        <div>
-          <textarea label="Enter your message" id="fullWidth"  onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          <Button  onClick={AddThisCommentary}>Create Commentary</Button>
-        </div>
-      </form>
+  return(
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style_modal}>
+          <div>
+            <label>Nouveau commentaire : </label>
+          </div>
+          <div>
+            <textarea label="Enter your message" onChange={(e) => setContent(e.target.value)} style={{"min-width":"-webkit-fill-available","max-width":"-webkit-fill-available", "min-height":"4em", "max-height":"7em"}}/>
+          </div>
+          <Button variant="contained" onClick={handleClose}>Annuler</Button>
+          <Button variant="contained" onClick={AddThisCommentary}>Valider</Button>
+        </Box>
+      </Modal>
+      <Button variant="contained" onClick={handleOpen}>Commenter</Button>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AddCommentary from "../Commentary/AddCommentary";
 import {Button} from "@mui/material";
 import Editor from "@monaco-editor/react";
 import Grid from '@mui/material/Grid';
@@ -36,13 +37,13 @@ const EditorComponent = (props) => {
   const Execute=()=>{
     console.log(typeCodeSelected)
 
-    fetch("http://api.gitter.localhost/publication", {
+    fetch(`${process.env.REACT_APP_API_URL}/publication`, {
       "headers": {
         "accept": "application/json",
         "authorization": `Bearer ${cookies["keycloaktoken"]}`,
         "content-type": "application/json",
       },
-      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"content\":\"" + props.contentMessageAdd + "\"}",
+      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"content\":\"" + props.contentMessageAdd + "\"}", //contentMessage
       "method": "POST"
     });
   }
@@ -60,13 +61,13 @@ const EditorComponent = (props) => {
 
       <Grid container spacing={1} style={{"padding-top":"1em"}} alignItems="flex-center" justifyContent="flex-end">
         <Grid item xs={2} style={{display:CommentButtonVisibility}}>
-          <Button variant="contained" onClick={Execute} >Commenter</Button>
+          <AddCommentary publicationId={props.publicationId}></AddCommentary>
         </Grid>
         <Grid item xs={2}>
-          <Button variant="contained" onClick={Execute} >Éxecuter</Button>
+          <Button variant="contained" onClick={Execute}>Éxecuter</Button>
         </Grid>
         <Grid item xs={2} style={{display:executionPublication}}>
-          <Button variant="contained"  onClick={publish}>Publier</Button>
+          <Button variant="contained" onClick={publish}>Publier</Button>
         </Grid>
         <Grid item xs={2}>
           <select name="typeCode">
