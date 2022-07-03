@@ -32,6 +32,13 @@ export default function News() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  var userWhoFollows = [
+    {
+      "userId": "ee70149e-64c3-4772-942e-9017c32a8476",
+      "username": "e@gmail.com",
+      "userURL": "http://localhost:3002/user/ee70149e-64c3-4772-942e-9017c32a8476"
+    }
+  ];
   const [dataPublication, setDataPublication] = React.useState( [
     {
       "author": "Paul 2",
@@ -74,6 +81,25 @@ export default function News() {
       .catch(err => {
         console.log("erreur : " + err);
       })
+
+    //Récup les follower de l'user connecté
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/follows/${cookies["userId"]}?page=0&size=10`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none":"none"}
+    })
+      .then(value => {
+        const userIDFollower = value.data.map((res) => res["userId"]);
+        userWhoFollows = userIDFollower;
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+
+
   }, []);
 
   return (
@@ -102,7 +128,7 @@ export default function News() {
         </Grid>
         <Grid item xs={10}>
           <Item>
-            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} content={curr.content} typeCode={"c"} userId={curr.userId} like={curr.likes}/>)}
+            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} content={curr.content} typeCode={"c"} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes}/>)}
           </Item>
         </Grid>
       </Grid>
@@ -120,3 +146,4 @@ export default function News() {
 //   "sharedPublicationId": null,
 //   "parentPublicationId": null,
 //   "likes": []
+

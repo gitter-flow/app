@@ -3,17 +3,21 @@ import News from "../../components/News";
 import Menu from "../Menu/Menu";
 import NoMatch from "../../components/NoMatch";
 import ProfileUser from "../../components/Profile/ProfileUser";
+import { useCookies } from 'react-cookie';
 
+const Home = (props) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
-const Home = () => (
+  return (
   <>
     <Menu/>
-        <Routes>
-          <Route exact path="/" element={<News/>}/>
-          <Route path="/myprofile/" element={<ProfileUser/>}/>
-          <Route path="*" element={<NoMatch/>}/>
-        </Routes>
+    <Routes>
+      <Route exact path="/" element={<News/>}/>
+      <Route path="/myprofile/" element={<ProfileUser userId={cookies["userId"]}/>}/>
+      <Route path="*" element={<NoMatch/>}/>
+    </Routes>
   </>
-)
+  )
+}
 
 export default Home;

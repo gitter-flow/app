@@ -6,6 +6,7 @@ const AddCommentary = (props) => {
   const publicationId = props.publicationId
 
   const AddThisCommentary = () => {
+    console.log("commentary");
     console.log(publicationId)
     console.log(userId)
     console.log(content)

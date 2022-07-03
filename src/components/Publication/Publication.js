@@ -17,6 +17,7 @@ import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
 import EditorComponent from "../Editor/EditorComponent";
 import Commentaries from "../Commentary/Commentaries";
 import Commentary from "../Commentary/Commentary";
+import FollowUser from "./FollowUser";
 import {Button} from "@mui/material";
 import {useEffect} from "react";
 import axios from "axios";
@@ -76,10 +77,6 @@ const Publication = (props) => {
   const ForkHandleClick = () => {
     setFork(!fork)
   };
-  const commentHandleClick = () => {
-    console.log("Func pour follow")
-    console.log(props.publicationId)
-  };
 
   useEffect(() => {
     if (props.publicationId)
@@ -100,11 +97,6 @@ const Publication = (props) => {
         .catch(err => {
           console.log("erreur : " + err);
         })
-
-
-
-
-
 
     axios({
       method: "GET",
@@ -155,9 +147,7 @@ const Publication = (props) => {
             {numberLike}
           </ListItemIcon>
           <ListItemIcon style={{textAlign:''}}>
-            <Tooltip title="Suivre">
-              <ReplyIcon onClick={commentHandleClick} />
-            </Tooltip>
+              <FollowUser publisherUserId={props.publisherUserId} followersId={props.followersId}></FollowUser>
           </ListItemIcon>
           <ListItemIcon style={{textAlign:''}}>
             <select name="version">

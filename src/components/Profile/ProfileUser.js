@@ -1,7 +1,14 @@
 import * as React from "react";
+import axios from "axios";
 import './ProfileUser.css';
 import {Button} from "@mui/material";
+import {useEffect} from "react";
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import { useCookies } from 'react-cookie';
+
 const ProfileUser = (props) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [follow, setFollow] = React.useState(true);
   const profileImg = props.profileImg
   const profileName = props.profileName
@@ -21,30 +28,52 @@ const ProfileUser = (props) => {
     setFollow(!follow);
     console.log(props.userId)
     console.log(props.userToFollowId)
-
-
   };
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/${props.userId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none":"none"}
+    })
+      .then(value => {
+        setdataUser(value.data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+
+  }, []);
+
   return (
-    <>
-      <div className="container">
-        <div className="row m-b-r m-t-3">
-          <div className="col-md-2 offset-md-1">
-            <img src={profileImg} alt="" className="profile-photo"/>
-          </div>
-        </div>
-        <div className="col-md-9 p-t-2">
-          <h2>Mail : {dataUser.username}</h2>
-          <p>Mail : {dataUser.username}</p>
-          {true ? <Button variant="contained" onClick={FollowHandleClick} >Follow</Button> : <Button variant="outlined" onClick={FollowHandleClick} >Unfollow</Button>}
-            <ul className="flex-menu">
-              <li><strong>{"non implémenté"}</strong> posts</li>
-              <li><strong>{dataUser.numberOfFollowers}</strong> followers</li>
-              <li><strong>{dataUser.numberOfFollows}</strong> following</li>
-            </ul>
-        </div>
-      </div>
-    </>
-);
+    <List>
+      <Grid container spacing={1}>
+          <grid item xs={8}>
+            <div>
+              <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
+            </div>
+          </grid>
+          <grid item xs={4}>
+            <div>
+              <h2>Mail : {dataUser.username}</h2>
+              <p>Mail : {dataUser.username}</p>
+              {props.userId != cookies["userId"] &&
+                <div>
+                  {true ? <Button variant="contained" onClick={FollowHandleClick} >Follow</Button> : <Button variant="outlined" onClick={FollowHandleClick} >Unfollow</Button>}
+                </div>
+              }
+              <ul className="flex-menu">
+                <li><strong>{dataUser.numberOfFollowers}</strong> followers</li>
+                <li><strong>{dataUser.numberOfFollows}</strong> following</li>
+              </ul>
+            </div>
+          </grid>
+      </Grid>
+    </List>
+  );
 }
 
 export default ProfileUser;
