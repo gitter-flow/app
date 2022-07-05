@@ -137,13 +137,3 @@ export default function News() {
   );
 }
 
-// "id": "1c50930c-f92d-4e2e-95f9-1fb0804e2cbf",
-//   "username": "f@gmail.com",
-//   "userId": "ee70149e-64c3-4772-942e-9017c32a8477",
-//   "content": "this is the second publication ! ",
-//   "createdAt": "2022-06-21 17:14:37.637",
-//   "codeId": null,
-//   "sharedPublicationId": null,
-//   "parentPublicationId": null,
-//   "likes": []
-

@@ -17,6 +17,7 @@ import ForkLeftSharpIcon from '@mui/icons-material/ForkLeftSharp';
 import EditorComponent from "../Editor/EditorComponent";
 import Commentary from "../Commentary/Commentary";
 import FollowUser from "./FollowUser";
+import DeletePublication from "./DeletePublication";
 import {Button} from "@mui/material";
 import {useEffect} from "react";
 import axios from "axios";
@@ -145,6 +146,9 @@ const Publication = (props) => {
             </Tooltip>
             {numberLike}
           </ListItemIcon>
+          {props.publisherUserId == cookies["userId"] &&
+            <DeletePublication publicationId={props.publicationId}/>
+          }
           <ListItemIcon style={{textAlign:''}}>
               <FollowUser publisherUserId={props.publisherUserId} followersId={props.followersId}></FollowUser>
           </ListItemIcon>
@@ -175,7 +179,7 @@ const Publication = (props) => {
         </List>
         {/*<Commentaries publicationId={props.publicationId} label={"username"} id={props.userId}/>*/}
         <div>
-          {dataCommentary.map((curr, index) => <Commentary key={index} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
+          {dataCommentary.map((curr, index) => <Commentary key={index} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
         </div>
       </Collapse>
       <Divider variant="inset" component="li" />

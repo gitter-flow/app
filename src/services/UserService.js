@@ -19,15 +19,23 @@ const initKeycloak = (onAuthenticatedCallback) => {
         console.log("user is not authenticated..!");
       } else {
         console.log("user is authenticated..!");
+<<<<<<< Updated upstream
         document.cookie = "keycloaktoken=" + _kc.token;
         document.cookie = "userId=" + getuserId();
+=======
+        
+>>>>>>> Stashed changes
       }
       onAuthenticatedCallback();
     })
     .catch(console.error);
 };
 
-const doRegister = _kc.register
+const doRegister = () => {
+  _kc.register().then((data) => {
+    console.log(data);
+  })
+}
 
 const doLogin = _kc.login;
 

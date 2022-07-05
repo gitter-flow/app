@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Button, TextField} from "@mui/material";
 import List from '@mui/material/List';
+import DeleteCommentary from "./DeleteCommentary";
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
@@ -9,8 +10,11 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import EditCommentary from "./EditCommentary";
+import { useCookies } from 'react-cookie';
 
 const Commentary = (props) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+
   const [content, setContent] = React.useState("");
   // const isOwner = props.id === "userId" // replace with cookie value
   // const buttonVisibility = isOwner ? "visible" : "hidden"
@@ -59,6 +63,9 @@ const Commentary = (props) => {
 
           }
         />
+        {props.publisherUserId == cookies["userId"] &&
+          <DeleteCommentary commentId={""}></DeleteCommentary>
+        }
         {/*<Button  style={{visibility:buttonVisibility}} onClick={EditThisCommentary}>Edit</Button>{ like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}{like ? props.like :props.like+1}*/}
       </ListItem>
       <Divider variant="inset" component="li" />
