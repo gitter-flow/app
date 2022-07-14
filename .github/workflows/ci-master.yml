@@ -13,4 +13,4 @@ jobs:
       run: |
         make build-docker-prod TAG_PROD=latest
         echo ${{ secrets.QUAY_PASSWORD }} | docker login -u ${{ secrets.QUAY_LOGIN }} --password-stdin quay.io
-        make deploy-docker-prof TAG_PROD=latest
+        make deploy-docker-prod TAG_PROD=latest
