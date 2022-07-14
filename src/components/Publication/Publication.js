@@ -173,7 +173,7 @@ const Publication = (props) => {
             <u>Reprendre une publication</u>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <AddPublication typeCode="c" addPublication={true}/>
+            <AddPublication typeCode={props.selectedCode} addPublication={true} contentMessage={props.code}/>
           </Typography>
         </Box>
       </Modal>

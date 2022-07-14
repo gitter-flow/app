@@ -14,7 +14,7 @@ const EditorComponent = (props) => {
   const [contentCode, setContentCode] = React.useState(props.content);
   const [content, setContent] = React.useState();
   const isOwner = props.userId === cookies["userId"] // replace with cookie value
-  const addPublication = props.addPublication? "none" : "visible"
+  const addPublication = props.addPublication ? "none" : "visible"
   const readOnly = (addPublication==="none" || isOwner)
   const executionPublication = props.addPublication? "visible" : "none"
   const CommentButtonVisibility = props.addPublication? "none" : "visible"
@@ -54,6 +54,39 @@ const EditorComponent = (props) => {
       });
 
   };
+
+  const fork = async () => {
+    let publicationId;
+    await fetch(`${process.env.REACT_APP_API_URL}/publication`, {
+      "headers": {
+        "accept": "application/json",
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+        "content-type": "application/json",
+      },
+      "body": `{\"userId\":\"${cookies["userId"]}\",\"content\":\"` + props.contentMessageAdd + "\"}",
+      "method": "POST"
+    }).then(response=>response.json())
+      .then(data=>{
+        console.log(data.id);
+        publicationId = data.id;
+      })
+
+    fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
+      "headers": {
+        "accept": "application/json",
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+        "content-type": "application/json",
+      },
+      "body": "{\"publicationId\":\"" + publicationId + "\",\"codeType\":\"" + typeCode[1] + "\",\"code\":\"" + contentCode + "\"}",
+      "method": "POST"
+    }).then(response=>response.json())
+      .then(data=>{
+        console.log(data.output); // OUTPUT
+        setResultCode(data.output);
+      });
+
+  };
+
   const Execute = () => {
 
     let codeFormated = contentCode.replaceAll("\"", "\\\"");
@@ -64,7 +97,7 @@ const EditorComponent = (props) => {
         "authorization": `Bearer ${cookies["keycloaktoken"]}`,
         "content-type": "application/json",
       },
-      "body": `{\"codeType\":\"${typeCode[selectedTypeCode]}\",\"code\":\"` + codeFormated + "\"}", //contentMessage
+      "body": `{\"codeType\":\"${typeCode[selectedTypeCode]}\",\"code\":\"` + codeFormated + "\"}",
       "method": "POST"
     }).then(response=>{
       if (response.status == 400) {
@@ -89,7 +122,7 @@ const EditorComponent = (props) => {
           "authorization": `Bearer ${cookies["keycloaktoken"]}`,
           "content-type": "application/json",
         },
-        "body": `{\"codeType\":\"${typeCode[selectedTypeCode]}\",\"code\":\"` + props.content + "\"}", //contentMessage
+        "body": `{\"codeType\":\"${typeCode[selectedTypeCode]}\",\"code\":\"` + props.content + "\"}",
         "method": "POST"
       }).then(response=>response.json())
         .then(data => {
@@ -128,6 +161,9 @@ const EditorComponent = (props) => {
         </Grid>
         <Grid item xs={2} style={{display:executionPublication}}>
           <Button variant="contained" onClick={publish}>Publier</Button>
+        </Grid>
+        <Grid item xs={2} style={{display:executionPublication}}>
+          <Button variant="contained" onClick={fork}>Forker</Button>
         </Grid>
         <Grid item xs={2}>
           <select onChange={typeCodeHanlder}>

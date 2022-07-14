@@ -21,7 +21,7 @@ const AddPublication = (props) => {
         theme='vs-dark'
         selectedTypeCode={props.typeCode}
         addPublication = {props.addPublication}
-        contentMessage={props.contentMessage}
+        content={props.contentMessage}
         contentMessageAdd={content}
       />
     </>
