@@ -50,6 +50,15 @@ const getuserId = () => _kc.tokenParsed.sub;
 
 const hasRole = (roles) => roles.some((role) => _kc.hasRealmRole(role));
 
+_kc.onTokenExpired = () => {
+  console.log('Token expired', _kc.token);
+  _kc.updateToken(30).success(() => {
+    console.log('Successfully get a new token', _kc.token);
+  }).error(() => {
+    console.log('Erorr on trying to get a new token');
+  });
+}
+
 const UserService = {
   initKeycloak,
   doLogin,

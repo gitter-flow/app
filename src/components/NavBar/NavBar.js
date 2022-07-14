@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import UserService from '../../services/UserService';
 import {useNavigate} from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -59,12 +60,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  let userId = "1";
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -101,7 +102,7 @@ export default function NavBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={() => navigate(`/`)}><p>Accueil</p></MenuItem>
-      <MenuItem onClick={() => navigate(`/myprofile`)}>Profile</MenuItem>
+      <MenuItem onClick={() => navigate(`/myprofile`, {state: {userId: cookies["userId"]}})}>Profile</MenuItem>
       <MenuItem onClick={() => UserService.doSettings()}>Settings</MenuItem>
       <MenuItem onClick={() => UserService.doLogout()}>Logout</MenuItem>
     </Menu>

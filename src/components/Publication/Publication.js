@@ -19,13 +19,32 @@ import Commentary from "../Commentary/Commentary";
 import FollowUser from "./FollowUser";
 import DeletePublication from "./DeletePublication";
 import {Button} from "@mui/material";
+import Grid from '@mui/material/Grid';
+import AddPublication from "..//Publication/AddPublication";
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 import {useEffect} from "react";
 import axios from "axios";
 import { useCookies } from 'react-cookie';
+import {useNavigate} from "react-router-dom";
 
+const style_modal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
 
 const Publication = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  let navigate = useNavigate();
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [dataCommentary, setDataCommentary] = React.useState( [
     {
       "username": "f@gmail.com",
@@ -39,7 +58,8 @@ const Publication = (props) => {
   const [like, setLike] = React.useState(true);
   const [numberLike, setnumberLike] = React.useState("0");
   const [fork, setFork] = React.useState(true);
-  const [version, setVersion] = React.useState(["version1","version2","version3"]);
+  const [userWhoFollows, setUserWhoFollows] = React.useState([]);
+  const [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
   const [contentMarkdown, setContentMarkdown] = React.useState('')
 
   const handleClick = () => {
@@ -78,6 +98,10 @@ const Publication = (props) => {
     setFork(!fork)
   };
 
+  const toProfilePage = () => {
+
+  }
+
   useEffect(() => {
     if (props.publicationId)
       axios({
@@ -113,12 +137,48 @@ const Publication = (props) => {
         console.log("erreur : " + err);
       })
 
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/follows/${cookies["userId"]}?page=0&size=100`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none":"none"}
+    })
+      .then((value) => {
+        if (value.data.length > 0) {
+          let userIds = value.data.map((data) => data["userId"]);
+          setUserWhoFollows(userIds);
+        } else {
+          setUserWhoFollows([]);
+        }
+        setuserWhoFollowsUpdate(!userWhoFollowsUpdate);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+
   }, []);
 
   return (
     <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style_modal}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <u>Reprendre une publication</u>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <AddPublication typeCode="c" addPublication={true}/>
+          </Typography>
+        </Box>
+      </Modal>
       <ListItem alignItems="flex-start">
-        <ListItemAvatar>
+        <ListItemAvatar onClick={() => navigate(`/myprofile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
           <Avatar alt={props.author} src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
         <ListItemText
@@ -137,9 +197,9 @@ const Publication = (props) => {
               {open ? <ExpandLess onClick={handleClick} /> : <ExpandMore onClick={handleClick} />}
             </Tooltip>
           </ListItemIcon>
-          {/*<ListItemIcon >*/}
-          {/*  {fork ? <ForkLeftSharpIcon onClick={ForkHandleClick} />: <ForkLeftSharpIcon style={{color: 'blue' }}onClick={ForkHandleClick} />}*/}
-          {/*</ListItemIcon>*/}
+          <ListItemIcon >
+            <ForkLeftSharpIcon onClick={handleOpen} />
+          </ListItemIcon>
           <ListItemIcon >
             <Tooltip title="J'aime">
               {like ? <FavoriteIcon onClick={FavAddHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavRemoveHandleClick} /> }
@@ -150,14 +210,15 @@ const Publication = (props) => {
             <DeletePublication publicationId={props.publicationId}/>
           }
           <ListItemIcon style={{textAlign:''}}>
-              <FollowUser publisherUserId={props.publisherUserId} followersId={props.followersId}></FollowUser>
+            <FollowUser key={userWhoFollowsUpdate} publisherUserId={props.publisherUserId} followersId={userWhoFollows}></FollowUser>
           </ListItemIcon>
           <ListItemIcon style={{textAlign:''}}>
-            <select name="version">
-              {version.map((currElement, index) => <option key={currElement} value={version[index]}>{version[index]}</option>)}
-            </select>
+            {props.versions != "" &&
+              <select>
+                {props.versions.map((currElement, index) => <option key={currElement} value={currElement.codeVersion}>{currElement.codeVersion}</option>)}
+              </select>
+            }
           </ListItemIcon>
-
         </ListItemButton>
       </List>
 
@@ -169,15 +230,13 @@ const Publication = (props) => {
             //defaultLanguage={props.typeCode}
             defaultValue=""
             theme='vs-dark'
-            typeCode={props.typeCode}
-            content={props.content}
+            typeCode={props.selectedCode}
+            content={props.code}
             onChange={(value) => setContentMarkdown(value)}
             addPublication = {props.addPublication}
             publicationId={props.publicationId}
           />
-
         </List>
-        {/*<Commentaries publicationId={props.publicationId} label={"username"} id={props.userId}/>*/}
         <div>
           {dataCommentary.map((curr, index) => <Commentary key={index} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
         </div>

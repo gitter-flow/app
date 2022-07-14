@@ -19,7 +19,7 @@ const AddPublication = (props) => {
         height={props.height}
         defaultValue=""
         theme='vs-dark'
-        typeCode={props.typeCode}
+        selectedTypeCode={props.typeCode}
         addPublication = {props.addPublication}
         contentMessage={props.contentMessage}
         contentMessageAdd={content}

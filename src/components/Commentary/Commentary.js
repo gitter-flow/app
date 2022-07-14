@@ -11,9 +11,11 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import EditCommentary from "./EditCommentary";
 import { useCookies } from 'react-cookie';
+import {useNavigate} from "react-router-dom";
 
 const Commentary = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  let navigate = useNavigate();
 
   const [content, setContent] = React.useState("");
   // const isOwner = props.id === "userId" // replace with cookie value
@@ -43,7 +45,7 @@ const Commentary = (props) => {
     <>
       {/*{edit ? <EditCommentary publicationId={"userId"} content={props.content} commentaryId={props.commentaryId} userId={"userId"}/> : null}*/}
       <ListItem alignItems="flex-start">
-        <ListItemAvatar>
+        <ListItemAvatar onClick={() => navigate(`/myprofile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
           <Avatar alt="Remy Sharp" src={props.img} />
         </ListItemAvatar>
         <ListItemText

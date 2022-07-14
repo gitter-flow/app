@@ -38,10 +38,8 @@ const FollowUser = (props) => {
     });
   };
 
-
   useEffect(() => {
     setFollow(props.followersId.indexOf(props.publisherUserId) != -1);
-
   }, []);
 
   return (

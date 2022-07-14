@@ -6,9 +6,9 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Publication from './Publication/Publication';
 import AddPublication from "./Publication/AddPublication";
-import {Button} from "@mui/material";
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import {Button} from "@mui/material";
 import Grid from '@mui/material/Grid';
 import { useState, useEffect } from 'react';
 import axios from "axios";
@@ -32,20 +32,25 @@ export default function News() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  var userWhoFollows = [
-    {
-      "userId": "ee70149e-64c3-4772-942e-9017c32a8476",
-      "username": "e@gmail.com",
-      "userURL": "http://localhost:3002/user/ee70149e-64c3-4772-942e-9017c32a8476"
-    }
-  ];
+  var userWhoFollows = [""];
   const [dataPublication, setDataPublication] = React.useState( [
     {
       "author": "Paul 2",
       "content": "Ici le commentaire d'une publication",
       "typeCode": "c",
       "userId": "1",
-      "likes":[]
+      "likes":[],
+      "code": {
+        "publicationId": "222c44ff-00ad-4734-8797-a456cc459212",
+        "codeType": null,
+        "code": "shell",
+        "versions": [
+          {
+            "codeVersion": "6829b3d9-5d82-473d-ba61-8972b7e5caeb",
+            "outputVersion": "4a05983d-917f-4e71-b605-262ec6caf09f"
+          }
+        ]
+      }
     },
   ]);
 
@@ -57,25 +62,47 @@ export default function News() {
     color: theme.palette.text.secondary,
   }));
 
-
-  useEffect(() => {
-
-    let options = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-    }
-    axios({
+  async function getCodeFromPublication(codeId) {
+    let res;
+    await axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/publication/all?page=0&size=10`,
+      url: `${process.env.REACT_APP_API_URL}/code/${codeId}`,
       headers: {
         "Content-Type": "application/json",
       },
       data: {"none":"none"}
     })
       .then(value => {
-        console.log("here");
+        res = value.data;
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+    return res;
+  }
+
+  useEffect(() => {
+    let options = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/publication/all?page=0&size=20`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none":"none"}
+    })
+      .then(async (value) => {
+        for (let publication of value.data) {
+          if (publication.codeId != null)
+            await getCodeFromPublication(publication.codeId).then(res => {
+              publication.code = res
+            });
+        }
+
         setDataPublication(value.data);
       })
       .catch(err => {
@@ -91,8 +118,8 @@ export default function News() {
       },
       data: {"none":"none"}
     })
-      .then(value => {
-        const userIDFollower = value.data.map((res) => res["userId"]);
+      .then(async (value) => {
+        const userIDFollower = await value.data.map((res) => res["userId"]);
         userWhoFollows = userIDFollower;
       })
       .catch(err => {
@@ -128,7 +155,7 @@ export default function News() {
         </Grid>
         <Grid item xs={10}>
           <Item>
-            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} content={curr.content} typeCode={"c"} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes}/>)}
+            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes}/>)}
           </Item>
         </Grid>
       </Grid>
