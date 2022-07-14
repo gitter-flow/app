@@ -50,7 +50,8 @@ export default function News() {
             "outputVersion": "4a05983d-917f-4e71-b605-262ec6caf09f"
           }
         ]
-      }
+      },
+      "parentPublicationId": ""
     },
   ]);
 
@@ -89,7 +90,7 @@ export default function News() {
     }
     axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/publication/all?page=0&size=20`,
+      url: `${process.env.REACT_APP_API_URL}/publication/all?page=0&size=30`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -155,7 +156,7 @@ export default function News() {
         </Grid>
         <Grid item xs={10}>
           <Item>
-            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes}/>)}
+            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId}/>)}
           </Item>
         </Grid>
       </Grid>

@@ -19,12 +19,8 @@ const initKeycloak = (onAuthenticatedCallback) => {
         console.log("user is not authenticated..!");
       } else {
         console.log("user is authenticated..!");
-<<<<<<< Updated upstream
         document.cookie = "keycloaktoken=" + _kc.token;
         document.cookie = "userId=" + getuserId();
-=======
-        
->>>>>>> Stashed changes
       }
       onAuthenticatedCallback();
     })

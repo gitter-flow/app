@@ -23,6 +23,7 @@ const AddPublication = (props) => {
         addPublication = {props.addPublication}
         content={props.contentMessage}
         contentMessageAdd={content}
+        parentPublicationId={props.parentPublicationId}
       />
     </>
   );

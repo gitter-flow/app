@@ -43,8 +43,8 @@ const style_modal = {
 const Publication = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   let navigate = useNavigate();
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpenRepublish(true);
+  const handleClose = () => setOpenRepublish(false);
   const [dataCommentary, setDataCommentary] = React.useState( [
     {
       "username": "f@gmail.com",
@@ -54,6 +54,7 @@ const Publication = (props) => {
     }
   ]);
 
+  const [openRepublish, setOpenRepublish] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [like, setLike] = React.useState(true);
   const [numberLike, setnumberLike] = React.useState("0");
@@ -65,6 +66,11 @@ const Publication = (props) => {
   const handleClick = () => {
     setOpen(!open);
   };
+
+  const handleClickRepublish = () => {
+    setOpenRepublish(!openRepublish);
+  };
+
   const FavAddHandleClick = () => {
     setLike(!like)
     setnumberLike((parseInt(numberLike) + 1).toString());
@@ -163,7 +169,7 @@ const Publication = (props) => {
   return (
     <>
       <Modal
-        open={open}
+        open={openRepublish}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -173,7 +179,7 @@ const Publication = (props) => {
             <u>Reprendre une publication</u>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <AddPublication typeCode={props.selectedCode} addPublication={true} contentMessage={props.code}/>
+            <AddPublication typeCode={props.selectedCode} addPublication={true} contentMessage={props.code} parentPublicationId={props.publicationId}/>
           </Typography>
         </Box>
       </Modal>
@@ -198,7 +204,7 @@ const Publication = (props) => {
             </Tooltip>
           </ListItemIcon>
           <ListItemIcon >
-            <ForkLeftSharpIcon onClick={handleOpen} />
+            <ForkLeftSharpIcon onClick={handleClickRepublish} />
           </ListItemIcon>
           <ListItemIcon >
             <Tooltip title="J'aime">
@@ -219,6 +225,11 @@ const Publication = (props) => {
               </select>
             }
           </ListItemIcon>
+          {props.parentPublicationId &&
+            <ListItemIcon>
+              <p>Publication venant d'un fork : {props.parentPublicationId}</p>
+            </ListItemIcon>
+          }
         </ListItemButton>
       </List>
 
@@ -230,7 +241,7 @@ const Publication = (props) => {
             //defaultLanguage={props.typeCode}
             defaultValue=""
             theme='vs-dark'
-            typeCode={props.selectedCode}
+            selectedTypeCode={props.selectedCode}
             content={props.code}
             onChange={(value) => setContentMarkdown(value)}
             addPublication = {props.addPublication}
