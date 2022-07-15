@@ -41,6 +41,7 @@ services:
       - SOCIAL_API_HOST=social-api
       - CHOKIDAR_USEPOLLING=true
       - SOCIAL_API_PORT=3002
+      - REACT_APP_API_URL=http://api.gitter.localhost
     volumes:
       - ./app:/app
       - /app/node_modules
@@ -112,7 +113,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.rule=Host(`gitter.localhost`) && PathPrefix(`/auth`)"
       - "traefik.http.routers.keycloak.entrypoints=web"
-    entrypoint: /tmp/keycloak/config/entrypoint.sh
+    #entrypoint: /tmp/entrypoint/entrypoint.sh
     command: 
       - 'start-dev'
       - '--log-level=debug'
@@ -124,6 +125,7 @@ services:
       - '--db-url=jdbc:postgresql://keycloak-db/keycloak'
       - '--db-username=keycloak'
       - '--db-password=password'
+      #- '--auto-build'
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: password
@@ -131,9 +133,11 @@ services:
       PROXY_ADDRESS_FORWARDING: "true"
       KEYCLOAK_IMPORT: /tmp/keycloak/config/realm.json
       KC_FEATURES: token-exchange
+      KEYCLOAK_EXTRA_ARGS: "-Dkeycloak.profile.feature.upload_scripts=enabled"
     volumes:
       - ./keycloak-event-listener/target/keycloak-event-listener-0.0.1.jar:/opt/keycloak/providers/keycloak-event-listener-0.0.1.jar
-      - ./configs/keycloak:/tmp/keycloak/config/
+      - ./configs/keycloak/realm:/opt/keycloak/data/import
+      - ./configs/keycloak/entrypoint:/tmp/entrypoint
     depends_on:
       - keycloak-db
     networks:
@@ -188,7 +192,7 @@ services:
       - KEYCLOAK_SERVER_URL=http://gitter.localhost/auth
       - KEYCLOAK_PROXY_URL=http://traefik:80
       - KEYCLOAK_CLIENT_ID=api-social
-      - KEYCLOAK_CLIENT_SECRET=p5qF946qR025nFFuohYvPbIgR9WE94SH
+      - KEYCLOAK_CLIENT_SECRET=FKJwQW802ZJHY43y5mvpB8a19DSxf3t1
       - SERVER_PORT=8081
       - LOG_LEVEL=INFO
     volumes:

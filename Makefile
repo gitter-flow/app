@@ -61,7 +61,7 @@ endif
 
 up:  ## Run Gitter containers
 	$(MAKE) env
-	@docker compose up -V -d --build
+	@docker compose up -V -d
 .PHONY: up
 
 ps: banner ## List Gitter containers
