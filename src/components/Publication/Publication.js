@@ -43,8 +43,8 @@ const style_modal = {
 const Publication = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   let navigate = useNavigate();
-  const handleOpen = () => setOpenRepublish(true);
-  const handleClose = () => setOpenRepublish(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [dataCommentary, setDataCommentary] = React.useState( [
     {
       "username": "f@gmail.com",
@@ -54,7 +54,6 @@ const Publication = (props) => {
     }
   ]);
 
-  const [openRepublish, setOpenRepublish] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [like, setLike] = React.useState(true);
   const [numberLike, setnumberLike] = React.useState("0");
@@ -66,11 +65,6 @@ const Publication = (props) => {
   const handleClick = () => {
     setOpen(!open);
   };
-
-  const handleClickRepublish = () => {
-    setOpenRepublish(!openRepublish);
-  };
-
   const FavAddHandleClick = () => {
     setLike(!like)
     setnumberLike((parseInt(numberLike) + 1).toString());
@@ -169,7 +163,7 @@ const Publication = (props) => {
   return (
     <>
       <Modal
-        open={openRepublish}
+        open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -179,7 +173,7 @@ const Publication = (props) => {
             <u>Reprendre une publication</u>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <AddPublication typeCode={props.selectedCode} addPublication={true} contentMessage={props.code} parentPublicationId={props.publicationId}/>
+            <AddPublication typeCode={props.selectedCode} addPublication={true} contentMessage={props.code}/>
           </Typography>
         </Box>
       </Modal>
@@ -204,7 +198,7 @@ const Publication = (props) => {
             </Tooltip>
           </ListItemIcon>
           <ListItemIcon >
-            <ForkLeftSharpIcon onClick={handleClickRepublish} />
+            <ForkLeftSharpIcon onClick={handleOpen} />
           </ListItemIcon>
           <ListItemIcon >
             <Tooltip title="J'aime">
@@ -225,26 +219,21 @@ const Publication = (props) => {
               </select>
             }
           </ListItemIcon>
-          {props.parentPublicationId &&
-            <ListItemIcon>
-              <p>Publication venant d'un fork de {props.parentPublicationUserName}</p>
-            </ListItemIcon>
-          }
         </ListItemButton>
       </List>
 
 
       <Collapse in={open} timeout="auto"  unmountOnExit>
-        <List disablePadding>
+        <List component="div" disablePadding>
           <EditorComponent
             height='400'
             //defaultLanguage={props.typeCode}
             defaultValue=""
             theme='vs-dark'
-            selectedTypeCode={props.selectedCode}
+            typeCode={props.selectedCode}
             content={props.code}
             onChange={(value) => setContentMarkdown(value)}
-            addPublication = {"false"}
+            addPublication = {props.addPublication}
             publicationId={props.publicationId}
           />
         </List>

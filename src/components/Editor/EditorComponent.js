@@ -24,7 +24,6 @@ const EditorComponent = (props) => {
   const [resultCode, setResultCode] = React.useState(props.content);
 
   const publish = async ()=>{
-    let codeFormated = contentCode.replaceAll("\"", "\\\"");
     let publicationId;
     await fetch(`${process.env.REACT_APP_API_URL}/publication`, {
       "headers": {
@@ -38,21 +37,22 @@ const EditorComponent = (props) => {
       .then(data=>{
         console.log(data.id);
         publicationId = data.id;
-
-        fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
-          "headers": {
-            "accept": "application/json",
-            "authorization": `Bearer ${cookies["keycloaktoken"]}`,
-            "content-type": "application/json",
-          },
-          "body": "{\"publicationId\":\"" + publicationId + "\",\"codeType\":\"" + selectedTypeCode + "\",\"code\":\"" + codeFormated + "\"}",
-          "method": "POST"
-        }).then(response=>response.json())
-          .then(data=>{
-            console.log(data.output); // OUTPUT
-            setResultCode(data.output);
-          });
       })
+
+    fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
+      "headers": {
+        "accept": "application/json",
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+        "content-type": "application/json",
+      },
+      "body": "{\"publicationId\":\"" + publicationId + "\",\"codeType\":\"" + typeCode[1] + "\",\"code\":\"" + contentCode + "\"}",
+      "method": "POST"
+    }).then(response=>response.json())
+      .then(data=>{
+        console.log(data.output); // OUTPUT
+        setResultCode(data.output);
+      });
+
   };
 
   const fork = async () => {
@@ -63,26 +63,28 @@ const EditorComponent = (props) => {
         "authorization": `Bearer ${cookies["keycloaktoken"]}`,
         "content-type": "application/json",
       },
-      "body": `{\"userId\":\"${cookies["userId"]}\",\"content\":\"` + props.contentMessageAdd + `\",\"parentPublicationId\": \"${props.parentPublicationId}\"}`,
+      "body": `{\"userId\":\"${cookies["userId"]}\",\"content\":\"` + props.contentMessageAdd + "\"}",
       "method": "POST"
     }).then(response=>response.json())
-      .then(data => {
+      .then(data=>{
+        console.log(data.id);
         publicationId = data.id;
-        let codeFormated = contentCode.replaceAll("\"", "\\\"");
-        fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
-          "headers": {
-            "accept": "application/json",
-            "authorization": `Bearer ${cookies["keycloaktoken"]}`,
-            "content-type": "application/json",
-          },
-          "body": "{\"publicationId\":\"" + publicationId + "\",\"codeType\":\"" + selectedTypeCode + "\",\"code\":\"" + codeFormated + "\"}",
-          "method": "POST"
-        }).then(response=>response.json())
-          .then(data=>{
-            console.log(data.output); // OUTPUT
-            setResultCode(data.output);
-          });
       })
+
+    fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
+      "headers": {
+        "accept": "application/json",
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+        "content-type": "application/json",
+      },
+      "body": "{\"publicationId\":\"" + publicationId + "\",\"codeType\":\"" + typeCode[1] + "\",\"code\":\"" + contentCode + "\"}",
+      "method": "POST"
+    }).then(response=>response.json())
+      .then(data=>{
+        console.log(data.output); // OUTPUT
+        setResultCode(data.output);
+      });
+
   };
 
   const Execute = () => {
@@ -95,7 +97,7 @@ const EditorComponent = (props) => {
         "authorization": `Bearer ${cookies["keycloaktoken"]}`,
         "content-type": "application/json",
       },
-      "body": `{\"codeType\":\"${selectedTypeCode}\",\"code\":\"` + codeFormated + "\"}",
+      "body": `{\"codeType\":\"${typeCode[selectedTypeCode]}\",\"code\":\"` + codeFormated + "\"}",
       "method": "POST"
     }).then(response=>{
       if (response.status == 400) {
@@ -114,14 +116,13 @@ const EditorComponent = (props) => {
 
   useEffect(() => {
     if (props.content && props.content != '' ) {
-      let codeFormated = props.content.replaceAll("\"", "\\\"");
       fetch(`${process.env.REACT_APP_API_URL}/code/run`, {
         "headers": {
           "accept": "application/json",
           "authorization": `Bearer ${cookies["keycloaktoken"]}`,
           "content-type": "application/json",
         },
-        "body": `{\"codeType\":\"${props.selectedTypeCode}\",\"code\":\"` + codeFormated + "\"}",
+        "body": `{\"codeType\":\"${typeCode[selectedTypeCode]}\",\"code\":\"` + props.content + "\"}",
         "method": "POST"
       }).then(response=>response.json())
         .then(data => {
@@ -132,26 +133,26 @@ const EditorComponent = (props) => {
   }, []);
 
   return(
-    <List sx={{ width: '100%', bgcolor: 'rgba(246,246,246,0.34)' }}>
-      <Grid container justifyContent="center">
+    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <Grid container>
         <Grid item xs={6} md={6}>
-          <h3>Editeur</h3>
           <Editor
             height={400}
             width={"-webkit-fill-available;"}
-            defaultLanguage={selectedTypeCode}
+            defaultLanguage={props.typeCode}
             defaultValue={contentCode}
             theme={props.theme}
             onChange={(value) => setContentCode(value)}
             options={{readOnly: false}}
           />
+          {/*!readOnly*/}
         </Grid>
         <Grid item xs={6} md={6}>
-          <h3>Résultat</h3>
+          <h2>Résultat</h2>
           <p>{resultCode}</p>
         </Grid>
       </Grid>
-      <Grid container spacing={1} style={{"paddingTop":"1em"}} alignItems="flex-center" justifyContent="flex-end">
+      <Grid container spacing={1} style={{"padding-top":"1em"}} alignItems="flex-center" justifyContent="flex-end">
         <Grid item xs={2} style={{display:CommentButtonVisibility}}>
           <AddCommentary publicationId={props.publicationId}></AddCommentary>
         </Grid>
@@ -161,16 +162,13 @@ const EditorComponent = (props) => {
         <Grid item xs={2} style={{display:executionPublication}}>
           <Button variant="contained" onClick={publish}>Publier</Button>
         </Grid>
-        {props.addPublication != "true" &&
-          <Grid item xs={2} style={{display: executionPublication}}>
-            <Button variant="contained" onClick={fork}>Forker</Button>
-          </Grid>
-        }
+        <Grid item xs={2} style={{display:executionPublication}}>
+          <Button variant="contained" onClick={fork}>Forker</Button>
+        </Grid>
         <Grid item xs={2}>
-            <select onChange={typeCodeHanlder} value={selectedTypeCode}>
-              {typeCode.map((currElement, index) => <option kCey={currElement} value={currElement}>{currElement}</option>)}
-            </select>
-
+          <select onChange={typeCodeHanlder}>
+            {typeCode.map((currElement, index) => <option kCey={currElement} value={index}>{currElement}</option>)}
+          </select>
         </Grid>
       </Grid>
 
