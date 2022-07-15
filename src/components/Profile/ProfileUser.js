@@ -8,6 +8,14 @@ import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import { useCookies } from 'react-cookie';
 import {useLocation} from 'react-router-dom';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import CreateTeam from "./CreateTeam";
+import TeamList from "./TeamList";
+
+
+
 
 const ProfileUser = ({route}) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
@@ -116,6 +124,10 @@ const ProfileUser = ({route}) => {
             <ul className="flex-menu">
               <li><strong>{dataUser.numberOfFollowers}</strong> followers</li>
               <li><strong>{dataUser.numberOfFollows}</strong> following</li>
+              <div>
+                <TeamList userId = {cookies["userId"]}/>
+                <Button variant="outlined" onClick={addTeam}>Creer une Equipe</Button>
+              </div>
               {location.state.userId != cookies["userId"] &&
                 <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={location.state.userId} followersId={userWhoFollows}></FollowUser></li>
               }
