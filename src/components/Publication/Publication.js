@@ -244,7 +244,7 @@ const Publication = (props) => {
             selectedTypeCode={props.selectedCode}
             content={props.code}
             onChange={(value) => setContentMarkdown(value)}
-            addPublication = {props.addPublication}
+            addPublication = {"false"}
             publicationId={props.publicationId}
           />
         </List>

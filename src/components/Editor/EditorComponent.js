@@ -151,7 +151,7 @@ const EditorComponent = (props) => {
           <p>{resultCode}</p>
         </Grid>
       </Grid>
-      <Grid container spacing={1} style={{"padding-top":"1em"}} alignItems="flex-center" justifyContent="flex-end">
+      <Grid container spacing={1} style={{"paddingTop":"1em"}} alignItems="flex-center" justifyContent="flex-end">
         <Grid item xs={2} style={{display:CommentButtonVisibility}}>
           <AddCommentary publicationId={props.publicationId}></AddCommentary>
         </Grid>
@@ -161,13 +161,16 @@ const EditorComponent = (props) => {
         <Grid item xs={2} style={{display:executionPublication}}>
           <Button variant="contained" onClick={publish}>Publier</Button>
         </Grid>
-        <Grid item xs={2} style={{display:executionPublication}}>
-          <Button variant="contained" onClick={fork}>Forker</Button>
-        </Grid>
+        {props.addPublication != "true" &&
+          <Grid item xs={2} style={{display: executionPublication}}>
+            <Button variant="contained" onClick={fork}>Forker</Button>
+          </Grid>
+        }
         <Grid item xs={2}>
-          <select onChange={typeCodeHanlder} value={selectedTypeCode}>
-            {typeCode.map((currElement, index) => <option kCey={currElement} value={currElement}>{currElement}</option>)}
-          </select>
+            <select onChange={typeCodeHanlder} value={selectedTypeCode}>
+              {typeCode.map((currElement, index) => <option kCey={currElement} value={currElement}>{currElement}</option>)}
+            </select>
+
         </Grid>
       </Grid>
 

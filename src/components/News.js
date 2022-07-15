@@ -153,7 +153,7 @@ export default function News() {
       >
         <Box sx={style_modal}>
           <h2>Nouvelle publication</h2>
-          <AddPublication typeCode="c" addPublication={true}/>
+          <AddPublication typeCode="c" addPublication={"true"}/>
         </Box>
       </Modal>
       <Grid container spacing={2}>
