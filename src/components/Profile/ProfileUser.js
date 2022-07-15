@@ -68,26 +68,24 @@ const ProfileUser = ({route}) => {
 
   return (
     <List>
-      <Grid container spacing={1}>
-        <Grid item xs={2}>
-          <div>
-            <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
-          </div>
+      <Grid container spacing={1} alignItems="center" justifyContent="center">
+        <Grid item xs={12}>
+          <h2>Profil</h2>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={1} md={3}>
+        </Grid>
+        <Grid item xs={3} alignItems="right" justifyContent="right">
+            <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
+        </Grid>
+        <Grid item xs={6}>
           <div>
-            <h2>Mail : {dataUser.username}</h2>
             <p>Mail : {dataUser.username}</p>
-            <p>{userWhoFollows.length}</p>
-            {location.state.userId != cookies["userId"] &&
-              <div>
-                <p>{userWhoFollows}</p>
-                <FollowUser key={userWhoFollowsUpdate} publisherUserId={location.state.userId} followersId={userWhoFollows}></FollowUser>
-              </div>
-            }
             <ul className="flex-menu">
               <li><strong>{dataUser.numberOfFollowers}</strong> followers</li>
               <li><strong>{dataUser.numberOfFollows}</strong> following</li>
+              {location.state.userId != cookies["userId"] &&
+                <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={location.state.userId} followersId={userWhoFollows}></FollowUser></li>
+              }
             </ul>
           </div>
         </Grid>

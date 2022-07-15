@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid';
 import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useCookies } from 'react-cookie';
+import "./home.css";
 
 
 
@@ -51,7 +52,8 @@ export default function News() {
           }
         ]
       },
-      "parentPublicationId": ""
+      "parentPublicationId": "",
+      "parentPublicationUserName": ""
     },
   ]);
 
@@ -102,6 +104,16 @@ export default function News() {
             await getCodeFromPublication(publication.codeId).then(res => {
               publication.code = res
             });
+
+          if (publication.parentPublicationId) {
+
+            var filteredObj = value.data.find(function(item, i){
+              if(publication.parentPublicationId === item.parentPublicationId){
+                return i;
+              }
+            });
+            publication.parentPublicationUserName = filteredObj.username;
+          }
         }
 
         setDataPublication(value.data);
@@ -131,7 +143,7 @@ export default function News() {
   }, []);
 
   return (
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    <List sx={{ width: '100%'}} className="home">
       {/*<Divider variant="inset" component="li" />*/}
       <Modal
         open={open}
@@ -140,12 +152,8 @@ export default function News() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style_modal}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            <u>Nouvelle publication</u>
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <AddPublication typeCode="c" addPublication={true}/>
-          </Typography>
+          <h2>Nouvelle publication</h2>
+          <AddPublication typeCode="c" addPublication={true}/>
         </Box>
       </Modal>
       <Grid container spacing={2}>
@@ -156,7 +164,7 @@ export default function News() {
         </Grid>
         <Grid item xs={10}>
           <Item>
-            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId}/>)}
+            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/>)}
           </Item>
         </Grid>
       </Grid>

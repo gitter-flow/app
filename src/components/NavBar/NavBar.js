@@ -101,7 +101,7 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => navigate(`/`)}><p>Accueil</p></MenuItem>
+      <MenuItem onClick={() => navigate(`/`)}>Accueil</MenuItem>
       <MenuItem onClick={() => navigate(`/myprofile`, {state: {userId: cookies["userId"]}})}>Profile</MenuItem>
       <MenuItem onClick={() => UserService.doSettings()}>Settings</MenuItem>
       <MenuItem onClick={() => UserService.doLogout()}>Logout</MenuItem>

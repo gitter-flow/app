@@ -5,6 +5,7 @@ import StoreService from "./services/StoreService";
 import RenderOnAnonymous from "./components/RenderOnAnonymous";
 import RenderOnAuthenticated from "./components/RenderOnAuthenticated";
 import Welcome from "./containers/Welcome/Welcome";
+import Footer from "./containers/footer/Footer";
 import { CookiesProvider } from 'react-cookie';
 
 const store = StoreService.setup();
@@ -22,6 +23,7 @@ const App = () => (
           </RenderOnAuthenticated>
         </div>
       </BrowserRouter>
+      <Footer></Footer>
     </Provider>
   </CookiesProvider>
 );

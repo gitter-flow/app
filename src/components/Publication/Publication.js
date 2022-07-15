@@ -227,7 +227,7 @@ const Publication = (props) => {
           </ListItemIcon>
           {props.parentPublicationId &&
             <ListItemIcon>
-              <p>Publication venant d'un fork : {props.parentPublicationId}</p>
+              <p>Publication venant d'un fork de {props.parentPublicationUserName}</p>
             </ListItemIcon>
           }
         </ListItemButton>
@@ -235,7 +235,7 @@ const Publication = (props) => {
 
 
       <Collapse in={open} timeout="auto"  unmountOnExit>
-        <List component="div" disablePadding>
+        <List disablePadding>
           <EditorComponent
             height='400'
             //defaultLanguage={props.typeCode}

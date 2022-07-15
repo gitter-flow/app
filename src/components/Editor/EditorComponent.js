@@ -132,10 +132,10 @@ const EditorComponent = (props) => {
   }, []);
 
   return(
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      <Grid container>
+    <List sx={{ width: '100%', bgcolor: 'rgba(246,246,246,0.34)' }}>
+      <Grid container justifyContent="center">
         <Grid item xs={6} md={6}>
-          <h2>Editeur</h2>
+          <h3>Editeur</h3>
           <Editor
             height={400}
             width={"-webkit-fill-available;"}
@@ -147,7 +147,7 @@ const EditorComponent = (props) => {
           />
         </Grid>
         <Grid item xs={6} md={6}>
-          <h2>Résultat</h2>
+          <h3>Résultat</h3>
           <p>{resultCode}</p>
         </Grid>
       </Grid>

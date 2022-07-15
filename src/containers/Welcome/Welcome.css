@@ -1,0 +1,110 @@
+@font-face {
+  font-family: "Nunito";
+  src: local("Nunito-Bold"),
+  url("../../font/Nunito/Nunito-Bold.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: local("Nunito"),
+  url("../../font/Nunito/Nunito-Regular.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: local("Nunito-Light"),
+  url("../../font/Nunito/Nunito-Light.ttf") format("truetype");
+  font-weight: bold;
+}
+
+* {
+  font-family: Nunito, sans-serif;
+}
+
+.jumbotron {
+  padding-bottom: 0px !important;
+}
+
+h1, h2{
+  font-family: Nunito-Bold, sans-serif;
+
+}
+span {
+  font-family: Nunito-Light, sans-serif;
+}
+
+.welcome {
+  color: white;
+  /*padding-left: 5em;*/
+  /*padding-right: 5em;*/
+}
+
+.welcome-submenu {
+  color: black;
+  padding-left: 5em;
+  padding-right: 5em;
+}
+
+ a {
+  cursor: pointer;
+  margin: 1em;
+}
+
+.intro-panel-button {
+  margin-bottom: 1rem;
+  margin-right: 2.4rem;
+  text-decoration: none;
+}
+
+.button-caribbean {
+  font-weight: 400;
+  line-height: 2.6rem;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 0.8em 3.5em;
+  background-color: #46bc99;
+  border: none;
+  border-radius: 0.5em;
+  outline: none;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  text-align: center;
+  transition: background-color .1s ease, border-color .1s ease;
+}
+
+.button-caribbean:hover, .button-caribbean:focus {
+  text-decoration: none;
+  background: rgb(67, 167, 138);
+  border-color: rgb(67, 167, 138);
+}
+
+
+.subdued-button-clouds {
+  border: 1px solid #fffefe;
+  color: #fffefe;
+}
+.subdued-button-clouds {
+  padding: 0.8em 3.5em;
+  line-height: 2.6rem;
+  box-sizing: border-box;
+  display: inline-block;
+  background-color: transparent;
+  border-radius: 0.5em;
+  outline: none;
+  color: #fffefe;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  text-align: center;
+  transition: background-color .1s ease, border-color .1s ease;
+}
+
+.subdued-button-clouds:hover, .subdued-button-clouds:focus {
+  background-color: rgba(255, 254, 254, 0.05);
+}
+
+ .subdued-button-clouds:hover, .subdued-button-clouds:focus {
+   text-decoration: none;
+ }
