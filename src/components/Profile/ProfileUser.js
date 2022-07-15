@@ -23,6 +23,10 @@ const ProfileUser = ({route}) => {
   const [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
   let followModule;
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   useEffect(() => {
     if (location.state) {
       axios({
@@ -66,8 +70,37 @@ const ProfileUser = ({route}) => {
 
   }, []);
 
+
+  function addTeam() {
+    handleOpen();
+  }
+  const style_modal = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+  };
   return (
     <List>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style_modal}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <u>Creer une equipe</u>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <CreateTeam userId= {cookies["userId"]}/>
+          </Typography>
+        </Box>
+      </Modal>
       <Grid container spacing={1} alignItems="center" justifyContent="center">
         <Grid item xs={12}>
           <h2>Profil</h2>
