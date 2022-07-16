@@ -144,7 +144,6 @@ export default function News() {
 
   return (
     <List sx={{ width: '100%'}} className="home">
-      {/*<Divider variant="inset" component="li" />*/}
       <Modal
         open={open}
         onClose={handleClose}

@@ -8,14 +8,14 @@ import "./Welcome.css";
 const Welcome = () => (
   <List className="jumbotron" style={{backgroundImage: `url("https://cdn02.gitter.im/_s/9a6e2f303/images/home/banner.jpg")`}}>
     <Grid container direction="column" alignItems="center" justifyContent="center" className={"welcome"}>
-      <Grid offset={2} xs={10}>
+      <Grid item offset={2} xs={10}>
         <h1>Bienvenue sur Gitter !</h1>
       </Grid>
-      <Grid xs={12} className={"welcome-link"}>
+      <Grid item xs={12} className={"welcome-link"}>
         <a className="button-caribbean signup intro-panel-button" onClick={() => UserService.doLogin()}>Se connecter</a>
         <a className="subdued-button-clouds intro-panel-button" onClick={() => UserService.doRegister()}>S'inscire</a>
       </Grid>
-      <Grid xs={12} alignItems="left" justifyContent="left">
+      <Grid item xs={12} alignItems="left" justifyContent="left">
         <ul className="mini-features-list">
           <li>
             <h2>Gratuit et illimité</h2>
@@ -33,7 +33,7 @@ const Welcome = () => (
           </li>
         </ul>
       </Grid>
-      <Grid className={"welcome-submenu"} alignItems="center" justifyContent="center" style={{color: "#000000"}, {"backgroundColor": "#fbfbfb"}}>
+      <Grid item className={"welcome-submenu"} alignItems="center" justifyContent="center" style={{color: "#000000"}, {"backgroundColor": "#fbfbfb"}}>
         <h1>Conçu pour la collaboration entre communautés</h1>
         <p>
           Gitter est conçu pour rendre l'échange de messages, la collaboration et la découverte entre communautés aussi

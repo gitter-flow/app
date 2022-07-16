@@ -1,28 +1,76 @@
 import * as React from "react";
+import {Button} from "@mui/material";
+import Grid from '@mui/material/Grid';
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+
+import { useCookies } from 'react-cookie';
 
 const CreateTeam = (props) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [content, setContent] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const style_modal = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+  };
 
+  function addTeam() {
+    handleOpen();
+  }
 
   function creation() {
-    console.log(props.userId);
-    console.log(content);
+    fetch(`${process.env.REACT_APP_API_URL}/team`, {
+      "headers": {
+        "accept": "application/json",
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+        "content-type": "application/json",
+      },
+      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamName\":\""+ content +"\"}",
+      "method": "POST"
+    });
+    handleClose();
   }
 
   return (
     <>
-      <div>
-        <label> Nom du groupe : </label>
-      </div>
-      <div>
-        <textarea label="Entrer le nom de l'equipe" id=""  onChange={(e) => setContent(e.target.value)} style={{"min-width":"-webkit-fill-available","max-width":"-webkit-fill-available", "min-height":"4em", "max-height":"7em"}}/>
-
-      </div>
-      <div>
-        <button onClick={creation}> creation</button>
-      </div>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style_modal}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          <u>Créer une équipe</u>
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Grid container alignItems="center" justifyContent="center">
+            <Grid item xs={12}>
+              <label>Nom du groupe :</label>
+            </Grid>
+            <Grid item xs={9}>
+              <input type={"text"} onChange={(e) => setContent(e.target.value)} style={{"minWidth":"-webkit-fill-available","maxWidth":"-webkit-fill-available"}}/>
+            </Grid>
+            <Grid item xs={3}>
+              <Button color={"success"} variant="contained" onClick={creation} style={{"margin": "1em"}}>Confirmer</Button>
+            </Grid>
+          </Grid>
+        </Typography>
+      </Box>
+    </Modal>
+  <Button variant="outlined" onClick={addTeam}>Creer une nouvelle équipe</Button>
     </>
-  );
+);
 }
 
 export default CreateTeam;
