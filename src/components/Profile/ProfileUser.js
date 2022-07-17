@@ -75,6 +75,59 @@ const ProfileUser = ({route}) => {
   const [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
   let followModule;
 
+  function getPicture(userId) {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/picture/${userId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none": "none"}
+    })
+      .then((data) => {
+        console.log(data.value);
+        setSelectedImage(data.value);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+  }
+
+
+  const [selectedImage, setSelectedImage] = React.useState(null);
+  // let state = {
+  //   // Initially, no file is selected
+  //   selectedFile: null
+  // };
+  // On file select (from the pop up)
+  // function onFileChange (event) {
+  // onFileChange = event => {
+  //   // Update the state
+  //   state.selectedFile = event.target.files[0];
+  //   console.log("la");
+  //   console.log(event.target.files[0]);
+  //   console.log(state.selectedFile);
+  // };
+
+  // On file upload (click the upload button)
+  const onFileUpload = () => {
+    console.log("uzebgdisujfk");
+    console.log(selectedImage);
+    // Create an object of formData
+    const formData = new FormData();
+    // Update the formData object
+    formData.append(
+      "myFile",
+      selectedImage,
+      selectedImage.name
+    );
+    // Details of the uploaded file
+    // console.log(selectedImage.selectedFile);
+    // Request made to the backend api
+    // Send formData object
+    axios.post(`${process.env.REACT_APP_API_URL}/user/picture/${cookies["userId"]}`, formData);
+  };
+
   async function getCodeFromPublication(codeId) {
     let res;
     await axios({
@@ -146,7 +199,8 @@ const ProfileUser = ({route}) => {
   }
 
   useEffect(() => {
-    getPubliFromUser();
+    getPubliFromUser(location.state.userId);
+    getPicture();
     if (location.state) {
       axios({
         method: "GET",
@@ -197,9 +251,20 @@ const ProfileUser = ({route}) => {
           <h2>Profil</h2>
         </Grid>
         <Grid item xs={1} md={3}>
+          <div>
+            <input type="file" onChange={(event) => {
+              console.log(event.target.files[0]);
+              setSelectedImage(event.target.files[0]);
+            }}/>
+            <button onClick={onFileUpload}>
+              Upload!
+            </button>
+          </div>
+          {/*{this.fileData()}*/}
         </Grid>
         <Grid item xs={3} alignItems="right" justifyContent="right">
           <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
+          <img src={selectedImage} alt="" className="profile-photo"/>
         </Grid>
         <Grid item xs={6}>
           <div>
