@@ -9,5 +9,6 @@ import "./font/Nunito/Nunito-Regular.ttf";
 
 const renderApp = () => ReactDOM.render(<App/>, document.getElementById("root"));
 
-UserService.initKeycloak(renderApp);
+// UserService.initKeycloak(renderApp);
+renderApp();
 HttpService.configure();
