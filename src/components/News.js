@@ -31,6 +31,15 @@ const style_modal = {
 export default function News() {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [open, setOpen] = React.useState(false);
+  const [pageNumber, setPageNumber] = React.useState(0);
+  const upPageNumber = () => {
+    setPageNumber(pageNumber + 1);
+    init();
+  }
+  const downPageNumber = () => {
+    setPageNumber(pageNumber - 1);
+    init();
+  }
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   var userWhoFollows = [""];
@@ -84,7 +93,7 @@ export default function News() {
     return res;
   }
 
-  useEffect(() => {
+  function init() {
     let options = {
       headers: {
         "Content-Type": "application/json",
@@ -92,7 +101,7 @@ export default function News() {
     }
     axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/publication/all?page=0&size=30`,
+      url: `${process.env.REACT_APP_API_URL}/publication/all?page=${pageNumber}&size=10`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -138,8 +147,10 @@ export default function News() {
       .catch(err => {
         console.log("erreur : " + err);
       })
+  }
 
-
+  useEffect(() => {
+    init();
   }, []);
 
   return (
@@ -166,6 +177,17 @@ export default function News() {
             {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/>)}
           </Item>
         </Grid>
+        <Grid item xs={2}>
+        </Grid>
+        <Grid item xs={4} style={{"textAlign": "center"}}>
+          <Button disabled={pageNumber == 0} onClick={downPageNumber}>Page précédente</Button>
+        </Grid>
+        <Grid item xs={2}>
+          <p style={{"textAlign": "center"}}>Page {pageNumber}</p>
+        </Grid>
+          <Grid item xs={4} style={{"textAlign": "center"}}>
+            <Button disabled={dataPublication.length != 10} onClick={upPageNumber}>Page suivante</Button>
+          </Grid>
       </Grid>
 
     </List>

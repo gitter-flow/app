@@ -17,7 +17,6 @@ import CreateTeam from "./CreateTeam";
 import TeamList from "./TeamList";
 import Publication from '../Publication/Publication';
 
-
 const style_modal = {
   position: 'absolute',
   top: '50%',
@@ -85,8 +84,9 @@ const ProfileUser = ({route}) => {
       data: {"none": "none"}
     })
       .then((data) => {
-        console.log(data.value);
-        setSelectedImage(data.value);
+        console.log("res");
+        console.log(data.data);
+        setSelectedImage(data.data);
       })
       .catch(err => {
         console.log("erreur : " + err);
@@ -95,37 +95,25 @@ const ProfileUser = ({route}) => {
 
 
   const [selectedImage, setSelectedImage] = React.useState(null);
-  // let state = {
-  //   // Initially, no file is selected
-  //   selectedFile: null
-  // };
-  // On file select (from the pop up)
-  // function onFileChange (event) {
-  // onFileChange = event => {
-  //   // Update the state
-  //   state.selectedFile = event.target.files[0];
-  //   console.log("la");
-  //   console.log(event.target.files[0]);
-  //   console.log(state.selectedFile);
-  // };
-
-  // On file upload (click the upload button)
   const onFileUpload = () => {
-    console.log("uzebgdisujfk");
-    console.log(selectedImage);
-    // Create an object of formData
     const formData = new FormData();
-    // Update the formData object
     formData.append(
-      "myFile",
+      "image",
       selectedImage,
       selectedImage.name
     );
-    // Details of the uploaded file
-    // console.log(selectedImage.selectedFile);
-    // Request made to the backend api
-    // Send formData object
-    axios.post(`${process.env.REACT_APP_API_URL}/user/picture/${cookies["userId"]}`, formData);
+
+    fetch(`${process.env.REACT_APP_API_URL}/user/picture/${cookies["userId"]}`, {
+      "headers": {
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+      },
+      "body": formData,
+      "method": "POST"
+    });
+
+    getPicture(cookies["userId"]);
+
+    // axios.post(`${process.env.REACT_APP_API_URL}/user/picture/${cookies["userId"]}`, formData);
   };
 
   async function getCodeFromPublication(codeId) {
@@ -150,7 +138,7 @@ const ProfileUser = ({route}) => {
   function getPubliFromUser() {
     axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/publication/user/${location.state.userId}?page=0&size=30`,
+      url: `${process.env.REACT_APP_API_URL}/publication/user/${location.state.userId}?page=0&size=10`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -200,7 +188,7 @@ const ProfileUser = ({route}) => {
 
   useEffect(() => {
     getPubliFromUser(location.state.userId);
-    getPicture();
+    getPicture(location.state.userId);
     if (location.state) {
       axios({
         method: "GET",
@@ -263,8 +251,8 @@ const ProfileUser = ({route}) => {
           {/*{this.fileData()}*/}
         </Grid>
         <Grid item xs={3} alignItems="right" justifyContent="right">
-          <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
-          <img src={selectedImage} alt="" className="profile-photo"/>
+          {/*<img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>*/}
+          <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="profile-photo"/>
         </Grid>
         <Grid item xs={6}>
           <div>
@@ -288,7 +276,7 @@ const ProfileUser = ({route}) => {
       </Grid>
       <Grid container>
         <Grid item xs={12}>
-          <h2>Publications de l'utilisateur</h2>
+          <h2>les 10 dernières publications de l'utilisateur</h2>
         </Grid>
         <Grid item xs={12}>
           <Item>
