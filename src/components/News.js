@@ -33,12 +33,12 @@ export default function News() {
   const [open, setOpen] = React.useState(false);
   const [pageNumber, setPageNumber] = React.useState(0);
   const upPageNumber = () => {
+    init(pageNumber - 1);
     setPageNumber(pageNumber + 1);
-    init();
   }
   const downPageNumber = () => {
+    init(pageNumber + 1);
     setPageNumber(pageNumber - 1);
-    init();
   }
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -93,7 +93,7 @@ export default function News() {
     return res;
   }
 
-  function init() {
+  function init(val) {
     let options = {
       headers: {
         "Content-Type": "application/json",
@@ -150,7 +150,7 @@ export default function News() {
   }
 
   useEffect(() => {
-    init();
+    init(0);
   }, []);
 
   return (
