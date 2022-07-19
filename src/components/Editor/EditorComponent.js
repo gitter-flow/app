@@ -23,6 +23,25 @@ const EditorComponent = (props) => {
 
   const [resultCode, setResultCode] = React.useState(props.content);
 
+  const update = () => {
+    let codeFormated = contentCode.replaceAll("\"", "\\\"");
+    fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
+      "headers": {
+        "accept": "application/json",
+        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+        "content-type": "application/json",
+      },
+      "body": "{\"publicationId\":\"" + props.publicationId + "\",\"codeType\":\"" + selectedTypeCode + "\",\"code\":\"" + codeFormated + "\"}",
+      "method": "POST"
+    }).then(response=>response.json())
+      .then(data=>{
+        console.log(`code id :`);
+        console.log(data);
+        console.log(`publication content : ${content}`);
+        setResultCode(data.output);
+      });
+  }
+
   const publish = async ()=>{
     let codeFormated = contentCode.replaceAll("\"", "\\\"");
     let publicationId;
@@ -49,7 +68,9 @@ const EditorComponent = (props) => {
           "method": "POST"
         }).then(response=>response.json())
           .then(data=>{
-            console.log(data.output); // OUTPUT
+            console.log(`code id :`);
+            console.log(data);
+            console.log(`publication content : ${content}`);
             setResultCode(data.output);
           });
       })
@@ -152,6 +173,9 @@ const EditorComponent = (props) => {
         </Grid>
       </Grid>
       <Grid container spacing={1} style={{"paddingTop":"1em"}} alignItems="flex-center" justifyContent="flex-end">
+        <Grid item xs={2}>
+
+        </Grid>
         <Grid item xs={2} style={{display:CommentButtonVisibility}}>
           <AddCommentary publicationId={props.publicationId}></AddCommentary>
         </Grid>
@@ -161,20 +185,19 @@ const EditorComponent = (props) => {
         <Grid item xs={2} style={{display:executionPublication}}>
           <Button variant="contained" onClick={publish}>Publier</Button>
         </Grid>
-        {props.addPublication != "true" &&
-          <Grid item xs={2} style={{display: executionPublication}}>
-            <Button variant="contained" onClick={fork}>Forker</Button>
+        {
+          props.addPublication != "true" &&
+          <Grid item xs={2} style={{display:executionPublication}}>
+            <Button variant="contained" onClick={update}>Update</Button>
           </Grid>
         }
         <Grid item xs={2}>
             <select onChange={typeCodeHanlder} value={selectedTypeCode}>
-              {typeCode.map((currElement, index) => <option kCey={currElement} value={currElement}>{currElement}</option>)}
+              {typeCode.map((currElement, index) => <option key={currElement} value={currElement}>{currElement}</option>)}
             </select>
 
         </Grid>
       </Grid>
-
-
     </List>
   );
 }

@@ -56,6 +56,9 @@ const Publication = (props) => {
 
   const [openRepublish, setOpenRepublish] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [code, setCode] = React.useState(null);
+  const [selectedVersion, setSelectedVersion] = React.useState(props.versions[0]);
+  const [updateKey, setUpdateKey] = React.useState(0);
   const [like, setLike] = React.useState(true);
   const [numberLike, setnumberLike] = React.useState("0");
   const [fork, setFork] = React.useState(true);
@@ -104,8 +107,24 @@ const Publication = (props) => {
     setFork(!fork)
   };
 
-  const toProfilePage = () => {
-
+  const changeVersion = (event) => {
+    setSelectedVersion(event.target.value);
+    console.log(`code id : ${props.codeId}`)
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/code/version?codeId=${props.codeId}&versionId=${event.target.value}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none":"none"}
+    })
+      .then(async (value) => {
+        setUpdateKey(updateKey+1);
+        setCode(value.data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
   }
 
   useEffect(() => {
@@ -220,8 +239,8 @@ const Publication = (props) => {
           </ListItemIcon>
           <ListItemIcon style={{textAlign:''}}>
             {props.versions != "" &&
-              <select>
-                {props.versions.map((currElement, index) => <option key={currElement} value={currElement.codeVersion}>{currElement.codeVersion}</option>)}
+              <select value={selectedVersion} onChange={changeVersion}>
+                {props.versions.map((currElement, index) => <option key={index} value={currElement.codeVersion}>Version {props.versions.length - index}</option>)}
               </select>
             }
           </ListItemIcon>
@@ -238,18 +257,19 @@ const Publication = (props) => {
         <List disablePadding>
           <EditorComponent
             height='400'
+            key={updateKey}
             //defaultLanguage={props.typeCode}
             defaultValue=""
             theme='vs-dark'
             selectedTypeCode={props.selectedCode}
-            content={props.code}
+            content={code ? code : props.code}
             onChange={(value) => setContentMarkdown(value)}
             addPublication = {"false"}
             publicationId={props.publicationId}
           />
         </List>
         <div>
-          {dataCommentary.map((curr, index) => <Commentary key={index} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
+          {dataCommentary.map((curr, index) => <Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
         </div>
       </Collapse>
       <Divider variant="inset" component="li" />
