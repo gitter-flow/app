@@ -203,7 +203,7 @@ const Publication = (props) => {
         </Box>
       </Modal>
       <ListItem alignItems="flex-start">
-        <ListItemAvatar onClick={() => navigate(`/myprofile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
+        <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
           <Avatar alt={props.author} src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
         <ListItemText
@@ -217,7 +217,7 @@ const Publication = (props) => {
       </ListItem>
       <List>
         <ListItemButton style={{transitionDuration: '0s',alignItems:'center'}} >
-          <ListItemIcon >
+          <ListItemIcon>
             <Tooltip title="Code">
               {open ? <ExpandLess onClick={handleClick} /> : <ExpandMore onClick={handleClick} />}
             </Tooltip>
@@ -268,9 +268,12 @@ const Publication = (props) => {
             publicationId={props.publicationId}
           />
         </List>
-        <div>
-          {dataCommentary.map((curr, index) => <Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
-        </div>
+        {
+          dataCommentary.length != 0 &&
+            <div>
+              {dataCommentary.map((curr, index) => <Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
+            </div>
+        }
       </Collapse>
       <Divider variant="inset" component="li" />
     </>

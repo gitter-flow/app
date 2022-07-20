@@ -45,7 +45,7 @@ const Commentary = (props) => {
     <List sx={{ bgcolor: 'rgba(232,232,232,0.34)' }}>
       {/*{edit ? <EditCommentary publicationId={"userId"} content={props.content} commentaryId={props.commentaryId} userId={"userId"}/> : null}*/}
       <ListItem alignItems="flex-start">
-        <ListItemAvatar onClick={() => navigate(`/myprofile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
+        <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
           <Avatar alt="Remy Sharp" src={props.img} />
         </ListItemAvatar>
         <ListItemText

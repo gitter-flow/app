@@ -4,9 +4,10 @@ DOCKERFILE_DEV=Dockerfile
 TAG_PROD=latest
 DOCKERFILE_PROD=Dockerfile_prod
 BUILD_DIR=.
+SOCIAL_API_URL_PROD=http://api.gitter.uk
 
 _build-docker:
-	docker build -t $(IMAGE):$(TAG) -f $(DOCKERFILE) $(BUILD_DIR)
+	docker build $(BUILD_ARG) -t $(IMAGE):$(TAG) -f $(DOCKERFILE) $(BUILD_DIR)
 .PHONY: _build-docker
 
 _deploy-docker:
@@ -19,7 +20,7 @@ build-docker-dev:
 .PHONY: build-docker-dev
 
 build-docker-prod:
-	$(MAKE) _build-docker TAG=$(TAG_PROD) DOCKERFILE=$(DOCKERFILE_PROD)
+	$(MAKE) _build-docker BUILD_ARG="--build-arg SOCIAL_API_PROD=$(SOCIAL_API_URL_PROD)" TAG=$(TAG_PROD) DOCKERFILE=$(DOCKERFILE_PROD)
 .PHONY: build-docker-prod
 
 deploy-docker-dev:

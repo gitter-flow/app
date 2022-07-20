@@ -228,9 +228,12 @@ return (
       </Grid>
       <Grid item xs={12} md={1}>
       </Grid>
-      <Grid item xs={4}>
-        {memberOfTeam.map((curr, index) => <p>{curr}</p>)}
-      </Grid>
+      {
+        memberOfTeam.length != 0 &&
+        <Grid item xs={4}>
+          {memberOfTeam.map((curr, index) => <p>{curr}</p>)}
+        </Grid>
+      }
     </Grid>
   </>
 );

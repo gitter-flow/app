@@ -10,10 +10,10 @@ const Home = (props) => {
 
   return (
   <>
-    <Menu/>
+    {/* <Menu/> */}
     <Routes>
       <Route exact path="/" element={<News/>}/>
-      <Route path="/myprofile/" element={<ProfileUser userId={cookies["userId"]}/>}/>
+      <Route path="/profile/" element={<ProfileUser userId={cookies["userId"]}/>}/>
       <Route path="*" element={<NoMatch/>}/>
     </Routes>
   </>

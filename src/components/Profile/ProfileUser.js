@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import CreateTeam from "./CreateTeam";
 import TeamList from "./TeamList";
 import Publication from '../Publication/Publication';
+import Menu from "../../containers/Menu/Menu";
 
 const style_modal = {
   position: 'absolute',
@@ -233,6 +234,8 @@ const ProfileUser = ({route}) => {
 
 
   return (
+    <div>
+      <Menu/>
     <List>
       <Grid container spacing={1} alignItems="center" justifyContent="center">
         <Grid item xs={12}>
@@ -251,8 +254,14 @@ const ProfileUser = ({route}) => {
           {/*{this.fileData()}*/}
         </Grid>
         <Grid item xs={3} alignItems="right" justifyContent="right">
-          {/*<img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>*/}
-          <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="profile-photo"/>
+          {
+            !selectedImage &&
+            <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
+          }
+          {
+            selectedImage &&
+            <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="profile-photo"/>
+          }
         </Grid>
         <Grid item xs={6}>
           <div>
@@ -279,12 +288,16 @@ const ProfileUser = ({route}) => {
           <h2>les 10 dernières publications de l'utilisateur</h2>
         </Grid>
         <Grid item xs={12}>
-          <Item>
-            {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/>)}
-          </Item>
+          {
+            dataPublication.length != 0 &&
+            <Item>
+              {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/>)}
+            </Item>
+          }
         </Grid>
       </Grid>
     </List>
+    </div>
   );
 }
 

@@ -14,6 +14,7 @@ import { useState, useEffect } from 'react';
 import axios from "axios";
 import { useCookies } from 'react-cookie';
 import "./home.css";
+import Menu from "../containers/Menu/Menu";
 
 
 
@@ -43,28 +44,28 @@ export default function News() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   var userWhoFollows = [""];
-  const [dataPublication, setDataPublication] = React.useState( [
+  const [dataPublication, setDataPublication] = React.useState( Array.from([
     {
-      "author": "Paul 2",
-      "content": "Ici le commentaire d'une publication",
-      "typeCode": "c",
-      "userId": "1",
+      "author": "",
+      "content": "",
+      "typeCode": "",
+      "userId": "",
       "likes":[],
       "code": {
-        "publicationId": "222c44ff-00ad-4734-8797-a456cc459212",
+        "publicationId": "",
         "codeType": null,
-        "code": "shell",
+        "code": "",
         "versions": [
           {
-            "codeVersion": "6829b3d9-5d82-473d-ba61-8972b7e5caeb",
-            "outputVersion": "4a05983d-917f-4e71-b605-262ec6caf09f"
+            "codeVersion": "",
+            "outputVersion": ""
           }
         ]
       },
       "parentPublicationId": "",
       "parentPublicationUserName": ""
     },
-  ]);
+  ]));
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -154,7 +155,10 @@ export default function News() {
   }, []);
 
   return (
+    <div>
+      <Menu/>
     <List sx={{ width: '100%'}} className="home">
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -194,6 +198,7 @@ export default function News() {
       </Grid>
 
     </List>
+    </div>
   );
 }
 
