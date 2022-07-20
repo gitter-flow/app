@@ -1,6 +1,6 @@
 import Keycloak from "keycloak-js";
 
-const _kc = new Keycloak('/keycloak.json');
+const keycloak = new Keycloak('/keycloak.json');
 
 
 /**
@@ -9,9 +9,9 @@ const _kc = new Keycloak('/keycloak.json');
  * @param onAuthenticatedCallback
  */
 const initKeycloak = (onAuthenticatedCallback) => {
-  _kc.init({
+  keycloak.init({
     onLoad: 'check-sso',
-    silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+    // silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
     pkceMethod: 'S256',
   })
     .then((authenticated) => {
@@ -19,7 +19,7 @@ const initKeycloak = (onAuthenticatedCallback) => {
         console.log("user is not authenticated..!");
       } else {
         console.log("user is authenticated..!");
-        document.cookie = "keycloaktoken=" + _kc.token;
+        document.cookie = "keycloaktoken=" + keycloak.token;
         document.cookie = "userId=" + getuserId();
       }
       onAuthenticatedCallback();
@@ -28,42 +28,42 @@ const initKeycloak = (onAuthenticatedCallback) => {
 };
 
 const doRegister = () => {
-  _kc.register().then((data) => {
+  keycloak.register().then((data) => {
     console.log(data);
   })
 }
 
-const doLogin = _kc.login;
+const doLogin = keycloak.login;
 
-const doSettings = _kc.accountManagement;
+const doSettings = keycloak.accountManagement;
 
-const doLogout = _kc.logout;
+const doLogout = keycloak.logout;
 
-const getToken = () => _kc.token;
+const getToken = () => keycloak.token;
 
-const isLoggedIn = () => !!_kc.token;
+const isLoggedIn = () => !!keycloak.token;
 
 const updateToken = (successCallback) =>
-  _kc.updateToken(5)
+  keycloak.updateToken(5)
     .then(successCallback)
     .catch(doLogin);
 
-const getUsername = () => _kc.tokenParsed?.preferred_username;
+const getUsername = () => keycloak.tokenParsed?.preferred_username;
 
-const getuserId = () => _kc.tokenParsed.sub;
+const getuserId = () => keycloak.tokenParsed.sub;
 
-const hasRole = (roles) => roles.some((role) => _kc.hasRealmRole(role));
 
-_kc.onTokenExpired = () => {
-  console.log('Token expired', _kc.token);
-  _kc.updateToken(30).success(() => {
-    console.log('Successfully get a new token', _kc.token);
+keycloak.onTokenExpired = () => {
+  console.log('Token expired', keycloak.token);
+  keycloak.updateToken(30).success(() => {
+    console.log('Successfully get a new token', keycloak.token);
   }).error(() => {
     console.log('Erorr on trying to get a new token');
   });
 }
 
 const UserService = {
+  keycloak,
   initKeycloak,
   doLogin,
   doRegister,
@@ -74,7 +74,6 @@ const UserService = {
   updateToken,
   getUsername,
   getuserId,
-  hasRole,
 };
 
 export default UserService;
