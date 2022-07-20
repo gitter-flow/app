@@ -4,7 +4,7 @@ DOCKERFILE_DEV=Dockerfile
 TAG_PROD=latest
 DOCKERFILE_PROD=Dockerfile_prod
 BUILD_DIR=.
-SOCIAL_API_URL_PROD=http://api.gitter.uk
+SOCIAL_API_URL_PROD=https://api.gitter.uk
 
 _build-docker:
 	docker build $(BUILD_ARG) -t $(IMAGE):$(TAG) -f $(DOCKERFILE) $(BUILD_DIR)

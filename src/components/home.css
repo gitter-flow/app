@@ -23,10 +23,27 @@
   font-family: Nunito, sans-serif;
 }
 
-.home {
-  background-color: #FBFEF9;
+.home, publication {
+  background-color: #f1f1f1;
 }
 
+.item-publication {
+  background-color: #f2f1f1;
+  margin-bottom: 1em;
+  box-shadow: 0px 4px 9px #d8d8d8;
+  border-radius: 10px;
+}
+
+.item-commentary {
+  background-color: #eaeaea;
+  margin-bottom: 1em;
+}
+
+.publication-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
 
 h2, h3 {
   text-align:center;

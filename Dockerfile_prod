@@ -1,7 +1,7 @@
 # Ref: https://dev.to/aws-builders/containerize-react-app-with-docker-for-production-572b
 # stage1 - build react app first
 FROM node:lts-alpine3.15 as build
-ARG SOCIAL_API_PROD=http://api.gitter.uk
+ARG SOCIAL_API_PROD=https://api.gitter.uk
 WORKDIR /app
 ENV REACT_APP_API_URL $SOCIAL_API_PROD
 ENV PATH /app/node_modules/.bin:$PATH

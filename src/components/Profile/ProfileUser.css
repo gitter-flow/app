@@ -2,8 +2,8 @@ body {
   margin:0px;
 }
 .profile-photo {
-  width:100px;
-  height:auto;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 .profile-button {
@@ -43,6 +43,12 @@ ul {
   margin-inline-end: 0px;
   padding-inline-start: 40px;
 }
+
+.css-vvwnub-MuiDivider-root {
+  margin-top: 5em;
+  margin-bottom: 2em;
+}
+
 body {
   overflow: auto!important;
   font-family: Roboto,sans-serif;

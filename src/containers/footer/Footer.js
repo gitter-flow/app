@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
 const Footer = () => (
-  <List className="footer" style={{color: "#f0f0f0"}, {"backgroundColor": "#f0f0f0"}}>
+  <List className="footer" style={{color: "#f0f0f0"}, {"backgroundColor": "#FBFEF9"}}>
     <Grid container direction="column" alignItems="center" justifyContent="center">
       <Grid item xs={12}>
         <p>Condition d'utilisation</p>

@@ -17,6 +17,8 @@ import CreateTeam from "./CreateTeam";
 import TeamList from "./TeamList";
 import Publication from '../Publication/Publication';
 import Menu from "../../containers/Menu/Menu";
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
 
 const style_modal = {
   position: 'absolute',
@@ -73,6 +75,7 @@ const ProfileUser = ({route}) => {
 
   const [userWhoFollows, setUserWhoFollows] = React.useState([]);
   const [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
+  const [selectedImage, setSelectedImage] = React.useState(null);
   let followModule;
 
   function getPicture(userId) {
@@ -85,8 +88,6 @@ const ProfileUser = ({route}) => {
       data: {"none": "none"}
     })
       .then((data) => {
-        console.log("res");
-        console.log(data.data);
         setSelectedImage(data.data);
       })
       .catch(err => {
@@ -95,7 +96,6 @@ const ProfileUser = ({route}) => {
   }
 
 
-  const [selectedImage, setSelectedImage] = React.useState(null);
   const onFileUpload = () => {
     const formData = new FormData();
     formData.append(
@@ -236,67 +236,76 @@ const ProfileUser = ({route}) => {
   return (
     <div>
       <Menu/>
-    <List>
-      <Grid container spacing={1} alignItems="center" justifyContent="center">
-        <Grid item xs={12}>
-          <h2>Profil</h2>
-        </Grid>
-        <Grid item xs={1} md={3}>
-          <div>
-            <input type="file" onChange={(event) => {
-              console.log(event.target.files[0]);
-              setSelectedImage(event.target.files[0]);
-            }}/>
-            <button onClick={onFileUpload}>
-              Upload!
-            </button>
-          </div>
-          {/*{this.fileData()}*/}
-        </Grid>
-        <Grid item xs={3} alignItems="right" justifyContent="right">
+      <List>
+        <Grid container spacing={1} alignItems="center" justifyContent="center">
+
+          <Grid item xs={12}>
+            <h1 style={{"textAlign":"center"}}>Profil</h1>
+          </Grid>
+          <Grid item xs={2}>
+          </Grid>
+          <Grid item xs={4} alignItems="right" justifyContent="right">
+            {
+              !selectedImage &&
+              <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
+            }
+            {
+              selectedImage &&
+              <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="profile-photo"/>
+            }
+          </Grid>
+          <Grid item xs={6}>
+            <div>
+              <p><u>Mail</u> : {dataUser.username}</p>
+              <ul className="flex-menu">
+                <li><strong>{dataUser.numberOfFollowers}</strong> <u>followers</u></li>
+                <li><strong>{dataUser.numberOfFollows}</strong> <u>follow</u></li>
+                {location.state.userId != cookies["userId"] &&
+                  <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={location.state.userId} followersId={userWhoFollows}></FollowUser></li>
+                }
+              </ul>
+            </div>
+          </Grid>
           {
-            !selectedImage &&
-            <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
+            location.state.userId == cookies["userId"] &&
+            <Grid item xs={12} md={12} textAlign="center">
+              <div>
+                <h3>Changer mon image de profil</h3>
+                <input type="file" onChange={(event) => {
+                  setSelectedImage(event.target.files[0]);
+                }}/>
+                <Button variant="outlined" color="success" onClick={onFileUpload}>Valider</Button>
+              </div>
+            </Grid>
           }
-          {
-            selectedImage &&
-            <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="profile-photo"/>
-          }
+          <Grid item xs={12} style={{"marginBottom": "2em", "marginTop": "3em"}}>
+            <Divider variant="middle">
+              <Chip label="Equipe" />
+            </Divider>
+          </Grid>
+          <Grid item xs={12} textAlign="center">
+            <CreateTeam></CreateTeam>
+          </Grid>
+          <Grid item xs={12}>
+            <TeamList key={dataUser.teams} userTeams={dataUser.teams}/>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <div>
-            <p>Mail : {dataUser.username}</p>
-            <ul className="flex-menu">
-              <li><strong>{dataUser.numberOfFollowers}</strong> followers</li>
-              <li><strong>{dataUser.numberOfFollows}</strong> following</li>
-              {location.state.userId != cookies["userId"] &&
-                <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={location.state.userId} followersId={userWhoFollows}></FollowUser></li>
-              }
-            </ul>
-          </div>
+        <Grid container>
+          <Grid item xs={12} style={{"marginBottom": "2em", "marginTop": "3em"}}>
+            <Divider variant="middle">
+            <Chip label="Les 10 dernières publications de l'utilisateur"></Chip>
+            </Divider>
+          </Grid>
+          <Grid item xs={2}>
+          </Grid>
+          <Grid item xs={8}>
+            {
+              dataPublication.length != 0 &&
+              dataPublication.map((curr, index) => { return (<Item class={"item-publication"}><Publication style={{"marginBottom": "2em"}} key={index} codeId={curr.codeId} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/></Item>)})
+            }
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <h2>Equipes</h2>
-        </Grid>
-        <Grid item xs={12}>
-          <TeamList key={dataUser.teams} userTeams={dataUser.teams}/>
-          <CreateTeam></CreateTeam>
-        </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={12}>
-          <h2>les 10 dernières publications de l'utilisateur</h2>
-        </Grid>
-        <Grid item xs={12}>
-          {
-            dataPublication.length != 0 &&
-            <Item>
-              {dataPublication.map((curr, index) => <Publication key={index} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/>)}
-            </Item>
-          }
-        </Grid>
-      </Grid>
-    </List>
+      </List>
     </div>
   );
 }

@@ -43,34 +43,34 @@ const CreateTeam = (props) => {
 
   return (
     <>
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style_modal}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          <u>Créer une équipe</u>
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          <Grid container alignItems="center" justifyContent="center">
-            <Grid item xs={12}>
-              <label>Nom du groupe :</label>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style_modal}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <u>Créer une équipe</u>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <Grid container alignItems="center" justifyContent="center">
+              <Grid item xs={12}>
+                <label>Nom du groupe :</label>
+              </Grid>
+              <Grid item xs={9}>
+                <input type={"text"} onChange={(e) => setContent(e.target.value)} style={{"minWidth":"-webkit-fill-available","maxWidth":"-webkit-fill-available"}}/>
+              </Grid>
+              <Grid item xs={3}>
+                <Button color={"success"} variant="contained" onClick={creation} style={{"margin": "1em"}}>Confirmer</Button>
+              </Grid>
             </Grid>
-            <Grid item xs={9}>
-              <input type={"text"} onChange={(e) => setContent(e.target.value)} style={{"minWidth":"-webkit-fill-available","maxWidth":"-webkit-fill-available"}}/>
-            </Grid>
-            <Grid item xs={3}>
-              <Button color={"success"} variant="contained" onClick={creation} style={{"margin": "1em"}}>Confirmer</Button>
-            </Grid>
-          </Grid>
-        </Typography>
-      </Box>
-    </Modal>
-  <Button variant="outlined" onClick={addTeam}>Creer une nouvelle équipe</Button>
+          </Typography>
+        </Box>
+      </Modal>
+      <Button variant="outlined" onClick={addTeam}>Créer une équipe</Button>
     </>
-);
+  );
 }
 
 export default CreateTeam;

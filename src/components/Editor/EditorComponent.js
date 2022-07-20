@@ -195,7 +195,6 @@ const EditorComponent = (props) => {
             <select onChange={typeCodeHanlder} value={selectedTypeCode}>
               {typeCode.map((currElement, index) => <option key={currElement} value={currElement}>{currElement}</option>)}
             </select>
-
         </Grid>
       </Grid>
     </List>

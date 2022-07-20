@@ -28,6 +28,8 @@ import {useEffect} from "react";
 import axios from "axios";
 import { useCookies } from 'react-cookie';
 import {useNavigate} from "react-router-dom";
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 
 const style_modal = {
   position: 'absolute',
@@ -39,6 +41,14 @@ const style_modal = {
   boxShadow: 24,
   p: 4,
 };
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const Publication = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
@@ -64,7 +74,8 @@ const Publication = (props) => {
   const [fork, setFork] = React.useState(true);
   const [userWhoFollows, setUserWhoFollows] = React.useState([]);
   const [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
-  const [contentMarkdown, setContentMarkdown] = React.useState('')
+  const [contentMarkdown, setContentMarkdown] = React.useState('');
+  const [selectedImage, setSelectedImage] = React.useState(null);
 
   const handleClick = () => {
     setOpen(!open);
@@ -127,7 +138,26 @@ const Publication = (props) => {
       })
   }
 
+  function getPicture(userId) {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/picture/${userId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none": "none"}
+    })
+      .then((data) => {
+        setSelectedImage(data.data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+        setSelectedImage("");
+      })
+  }
+
   useEffect(() => {
+    getPicture(props.publisherUserId);
     if (props.publicationId)
       axios({
         method: "GET",
@@ -204,7 +234,14 @@ const Publication = (props) => {
       </Modal>
       <ListItem alignItems="flex-start">
         <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
-          <Avatar alt={props.author} src="/static/images/avatar/1.jpg" />
+          {
+            selectedImage == "" &&
+            <Avatar alt={props.author} src="/static/images/avatar/1.jpg" />
+          }
+          {
+            selectedImage != "" &&
+            <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="publication-photo"/>
+          }
         </ListItemAvatar>
         <ListItemText
           primary={props.author}
@@ -271,11 +308,10 @@ const Publication = (props) => {
         {
           dataCommentary.length != 0 &&
             <div>
-              {dataCommentary.map((curr, index) => <Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/>)}
+              {dataCommentary.map((curr, index) => {return (<Item class={"item-commentary"}><Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/></Item>)})}
             </div>
         }
       </Collapse>
-      <Divider variant="inset" component="li" />
     </>
   );
 }

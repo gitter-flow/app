@@ -145,98 +145,96 @@ const TeamList = (props) => {
               })
           }
 
-    })
-  .catch(err => {
-      console.log("erreur : " + err);
-    })
+        })
+        .catch(err => {
+          console.log("erreur : " + err);
+        })
+    }
   }
-}
 
-function joinThisTeam() {
-  if (teamId.length == 0) {
-    setTeamId(userTeams[0].teamId);
-    fetch(`${process.env.REACT_APP_API_URL}/team/join`, {
-      "headers": {
-        "accept": "application/json",
-        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
-        "content-type": "application/json",
-      },
-      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + userTeams[0].teamId + "\"}",
-      "method": "PUT"
-    });
-  } else {
-    fetch(`${process.env.REACT_APP_API_URL}/team/join`, {
-      "headers": {
-        "accept": "application/json",
-        "authorization": `Bearer ${cookies["keycloaktoken"]}`,
-        "content-type": "application/json",
-      },
-      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + teamId + "\"}",
-      "method": "PUT"
-    });
+  function joinThisTeam() {
+    if (teamId.length == 0) {
+      setTeamId(userTeams[0].teamId);
+      fetch(`${process.env.REACT_APP_API_URL}/team/join`, {
+        "headers": {
+          "accept": "application/json",
+          "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+          "content-type": "application/json",
+        },
+        "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + userTeams[0].teamId + "\"}",
+        "method": "PUT"
+      });
+    } else {
+      fetch(`${process.env.REACT_APP_API_URL}/team/join`, {
+        "headers": {
+          "accept": "application/json",
+          "authorization": `Bearer ${cookies["keycloaktoken"]}`,
+          "content-type": "application/json",
+        },
+        "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + teamId + "\"}",
+        "method": "PUT"
+      });
+    }
+    setIsMemberOfTheTeam(true);
+    handleClose();
   }
-  setIsMemberOfTheTeam(true);
-  handleClose();
-}
 
 
-return (
-  <>
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style_modal}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          <u>Rejoindre l'équipe</u>
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          <div>
-            <label> Voulez vous vraiment rejoindre cette équipe ? </label>
-          </div>
-          <div>
-            <Button color="primary" variant="contained" onClick={joinThisTeam}>Oui</Button>
-            <Button color="error" variant="contained" onClick={handleClose}>Non</Button>
-          </div>
-        </Typography>
-      </Box>
-    </Modal>
-    <Grid container>
-      <Grid item xs={6}>
-        <h2>Liste des équipes</h2>
-      </Grid>
-      <Grid item xs={6}>
-        <h2>Liste des membres</h2>
-      </Grid>
-      <Grid item xs={3}>
-        <ListItem>
-          <select onChange={teamHanlder} value={teamId} style={{"minWidth": "16em"}}>
-            { userTeams.map((curr,index) => <option   key = {index} value={curr.teamId}>{curr.teamName}</option> ) }
-          </select>
-        </ListItem>
-      </Grid>
-      <Grid item={7}>
-        { isMemberOfTheTeam &&
-          <Button color="error" variant="contained" onClick={deleteTeam}>Quitter l'équipe</Button>
-        }
-        { !isMemberOfTheTeam &&
-          <Button color="primary" variant="contained" onClick={handleOpen}>Rejoindre l'équipe</Button>
-        }
-        <Button color="error" variant="contained" onClick={deleteTeam}>Supprimer l'équipe</Button>
-      </Grid>
-      <Grid item xs={12} md={1}>
-      </Grid>
-      {
-        memberOfTeam.length != 0 &&
-        <Grid item xs={4}>
+  return (
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style_modal}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <u>Rejoindre l'équipe</u>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <div>
+              <label> Voulez vous vraiment rejoindre cette équipe ? </label>
+            </div>
+            <div>
+              <Button color="primary" variant="contained" onClick={joinThisTeam}>Oui</Button>
+              <Button color="error" variant="contained" onClick={handleClose}>Non</Button>
+            </div>
+          </Typography>
+        </Box>
+      </Modal>
+      <Grid container>
+        <Grid item xs={6}>
+          <h2>Liste des équipes</h2>
+        </Grid>
+        <Grid item xs={6}>
+          <h2>Liste des membres</h2>
+        </Grid>
+        <Grid item xs={6} textAlign="center">
+          <ListItem textAlign="center">
+            <select onChange={teamHanlder} value={teamId} style={{"minWidth": "-webkit-fill-available"}} textAlign="center">
+              { userTeams.map((curr,index) => <option   key = {index} value={curr.teamId}>{curr.teamName}</option> ) }
+            </select>
+          </ListItem>
+        </Grid>
+        <Grid item xs={6}>
           {memberOfTeam.map((curr, index) => <p>{curr}</p>)}
         </Grid>
-      }
-    </Grid>
-  </>
-);
+        <Grid item xs={6} textAlign="center" marginTop={"2em"}>
+          { isMemberOfTheTeam &&
+            <Button color="error" variant="contained" onClick={deleteTeam}>Quitter l'équipe</Button>
+          }
+          { !isMemberOfTheTeam &&
+            <Button color="primary" variant="contained" onClick={handleOpen}>Rejoindre l'équipe</Button>
+          }
+        </Grid>
+        <Grid item xs={6} textAlign="center" marginTop={"2em"}>
+          <Button color="error" variant="contained" onClick={deleteTeam}>Supprimer l'équipe</Button>
+        </Grid>
+      </Grid>
+
+    </>
+  );
 }
 export default TeamList;
 

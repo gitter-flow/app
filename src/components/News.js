@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SendIcon from "@mui/icons-material/Send";
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
@@ -157,48 +158,46 @@ export default function News() {
   return (
     <div>
       <Menu/>
-    <List sx={{ width: '100%'}} className="home">
+      <List sx={{ width: '100%'}} className="home" style={{"paddingTop":"1em"}}>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style_modal}>
-          <h2>Nouvelle publication</h2>
-          <AddPublication typeCode="c" addPublication={"true"}/>
-        </Box>
-      </Modal>
-      <Grid container spacing={2}>
-        <Grid item xs={2}>
-          <Item onClick={handleOpen} style={{"cursor": "pointer"}}>
-            <Button onClick={handleOpen}>Nouvelle publication</Button>
-          </Item>
-        </Grid>
-        <Grid item xs={10}>
-          {
-            dataPublication.length != 0 &&
-          <Item>
-            {dataPublication.map((curr, index) => <Publication key={index} codeId={curr.codeId} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/>)}
-          </Item>
-          }
-        </Grid>
-        <Grid item xs={2}>
-        </Grid>
-        <Grid item xs={4} style={{"textAlign": "center"}}>
-          <Button disabled={pageNumber == 0} onClick={downPageNumber}>Page précédente</Button>
-        </Grid>
-        <Grid item xs={2}>
-          <p style={{"textAlign": "center"}}>Page {pageNumber}</p>
-        </Grid>
-          <Grid item xs={4} style={{"textAlign": "center"}}>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style_modal}>
+            <h2>Nouvelle publication</h2>
+            <AddPublication typeCode="c" addPublication={"true"}/>
+          </Box>
+        </Modal>
+        <Grid container spacing={2}>
+          <Grid item xs={2} textAlign="center">
+              <Button variant="outlined" onClick={handleOpen} endIcon={<SendIcon />}>Nouvelle publication</Button>
+          </Grid>
+          <Grid item xs={8}>
+            {
+              dataPublication.length != 0 &&
+                dataPublication.map((curr, index) => { return (<Item class={"item-publication"}><Publication style={{"marginBottom": "2em"}} key={index} codeId={curr.codeId} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/></Item>)})
+            }
+          </Grid>
+          <Grid item xs={3}>
+          </Grid>
+          <Grid item xs={2} style={{"textAlign": "left"}}>
+            <Button disabled={pageNumber == 0} onClick={downPageNumber}>Page précédente</Button>
+          </Grid>
+          <Grid item xs={2}>
+            <p style={{"textAlign": "center"}}>Page {pageNumber}</p>
+          </Grid>
+          <Grid item xs={2} style={{"textAlign": "right"}}>
             <Button disabled={dataPublication.length != 10} onClick={upPageNumber}>Page suivante</Button>
           </Grid>
-      </Grid>
+        </Grid>
 
-    </List>
+      </List>
     </div>
   );
 }
+
+// style={{"background-color": "#f1f1f1"}}
 
