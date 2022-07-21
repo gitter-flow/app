@@ -19,6 +19,7 @@ import Publication from '../Publication/Publication';
 import Menu from "../../containers/Menu/Menu";
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
+import Avatar from '@mui/material/Avatar';
 
 const style_modal = {
   position: 'absolute',
@@ -43,7 +44,7 @@ const ProfileUser = ({route}) => {
     color: theme.palette.text.secondary,
   }));
   const [dataUser, setdataUser] = React.useState({
-    "id": "ee70149e-64c3-4772-942e-9017c32a8477",
+    "id": "example",
     "username": "f@gmail.com",
     "numberOfFollowers": 0,
     "numberOfFollows": 0,
@@ -55,7 +56,7 @@ const ProfileUser = ({route}) => {
       "author": "Paul 2",
       "content": "Ici le commentaire d'une publication",
       "typeCode": "c",
-      "userId": "1",
+      "userId": "example",
       "likes":[],
       "code": {
         "publicationId": "222c44ff-00ad-4734-8797-a456cc459212",
@@ -247,7 +248,7 @@ const ProfileUser = ({route}) => {
           <Grid item xs={4} alignItems="right" justifyContent="right">
             {
               !selectedImage &&
-              <img src={"https://i.imgur.com/u2AiVqu.jpeg"} alt="" className="profile-photo"/>
+              <Avatar src="/static/images/avatar/1.jpg" />
             }
             {
               selectedImage &&

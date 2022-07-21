@@ -18,6 +18,9 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import UserService from '../../services/UserService';
 import {useNavigate} from "react-router-dom";
 import { useCookies } from 'react-cookie';
+import {useEffect} from "react";
+import axios from "axios";
+import Avatar from '@mui/material/Avatar';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -63,6 +66,7 @@ export default function NavBar() {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [selectedImage, setSelectedImage] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -84,6 +88,27 @@ export default function NavBar() {
   };
   let navigate = useNavigate();
   const menuId = 'primary-search-account-menu';
+
+  function getPicture(userId) {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/picture/${userId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none": "none"}
+    })
+      .then((data) => {
+        setSelectedImage(data.data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+  }
+
+  useEffect(() => {
+    getPicture(cookies["userId"]);
+  }, []);
 
   const renderMenu = (
     <Menu
@@ -154,22 +179,25 @@ export default function NavBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/*<IconButton size="large" aria-label="show 4 new mails" color="inherit">*/}
-            {/*  <Badge badgeContent={4} color="error">*/}
-            {/*    <MailIcon />*/}
-            {/*  </Badge>*/}
+            {/*<IconButton*/}
+            {/*  size="large"*/}
+            {/*  edge="end"*/}
+            {/*  aria-label="account of current user"*/}
+            {/*  aria-controls={menuId}*/}
+            {/*  aria-haspopup="true"*/}
+            {/*  onClick={handleProfileMenuOpen}*/}
+            {/*  color="inherit"*/}
+            {/*>*/}
+            {/*  <AccountCircle />*/}
             {/*</IconButton>*/}
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            {
+              !selectedImage &&
+              <Avatar aria-controls={menuId} src="/static/images/avatar/1.jpg" onClick={handleProfileMenuOpen} />
+            }
+            {
+              selectedImage &&
+              <img aria-controls={menuId} onClick={handleProfileMenuOpen} key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="header-photo"/>
+            }
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
