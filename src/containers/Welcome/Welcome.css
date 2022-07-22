@@ -23,6 +23,10 @@
   font-family: Nunito, sans-serif;
 }
 
+.mini-features-list {
+  text-align: center;
+}
+
 .jumbotron {
   padding-bottom: 0px !important;
 }

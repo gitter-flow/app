@@ -15,25 +15,25 @@ const Welcome = () => (
         <a className="button-caribbean signup intro-panel-button" onClick={() => UserService.doLogin()}>Se connecter</a>
         <a className="subdued-button-clouds intro-panel-button" onClick={() => UserService.doRegister()}>S'inscire</a>
       </Grid>
-      <Grid item xs={12} alignItems="left" justifyContent="left">
+      <Grid item xs={12} alignItems="flex-center" justifyContent="center">
         <ul className="mini-features-list">
           <li>
             <h2>Gratuit et illimité</h2>
-            <span>Communiquer avec un grand nombre de personnes à travers le monde avec un historique et un nombre d'intégrations illimités.</span>
+            <p>Communiquer avec un grand nombre de personnes à travers le monde avec un historique et un nombre d'intégrations illimités.</p>
           </li>
 
           <li>
             <h2>Création simple</h2>
-            <span>Il vous suffit tout simplement de créer votre compte et de commencer une discussion.</span>
+            <p>Il vous suffit tout simplement de créer votre compte et de commencer une discussion.</p>
           </li>
 
           <li>
             <h2>Faites valider votre code !</h2>
-            <span>Formattez votre code comme avec votre IDE pour demander de l'aide à la communauté.</span>
+            <p>Formattez votre code comme avec votre IDE pour demander de l'aide à la communauté.</p>
           </li>
         </ul>
       </Grid>
-      <Grid item className={"welcome-submenu"} alignItems="center" justifyContent="center" style={{color: "#000000"}, {"backgroundColor": "#fbfbfb"}}>
+      <Grid item className={"welcome-submenu mini-features-list"} alignItems="center" justifyContent="center" style={{color: "#ededed"}, {"backgroundColor": "#fbfbfb", "margin-bottom": "1em;"}}>
         <h1>Conçu pour la collaboration entre communautés</h1>
         <p>
           Gitter est conçu pour rendre l'échange de messages, la collaboration et la découverte entre communautés aussi
