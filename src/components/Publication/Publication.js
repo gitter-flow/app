@@ -20,7 +20,7 @@ import FollowUser from "./FollowUser";
 import DeletePublication from "./DeletePublication";
 import {Button} from "@mui/material";
 import Grid from '@mui/material/Grid';
-import AddPublication from "..//Publication/AddPublication";
+import AddPublication from "../Publication/AddPublication";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
@@ -228,7 +228,7 @@ const Publication = (props) => {
             <u>Reprendre une publication</u>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <AddPublication typeCode={props.selectedCode} addPublication={true} contentMessage={props.code} parentPublicationId={props.publicationId}/>
+            <AddPublication typeCode={props.selectedCode} addPublication={true} contentMessage={props.code} parentPublicationId={props.publicationId} isRepublish={"true"}/>
           </Typography>
         </Box>
       </Modal>
@@ -308,7 +308,7 @@ const Publication = (props) => {
           />
         </List>
         {
-          dataCommentary.length != 0 &&
+          dataCommentary.length !== 0 &&
             <div>
               {dataCommentary.map((curr, index) => {return (<Item class={"item-commentary"}><Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/></Item>)})}
             </div>

@@ -25,6 +25,7 @@ const AddPublication = (props) => {
         contentMessageAdd={content}
         parentPublicationId={props.parentPublicationId}
         addPublication={props.addPublication}
+        isRepublish={props.isRepublish}
       />
     </>
   );

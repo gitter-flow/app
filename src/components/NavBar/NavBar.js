@@ -174,8 +174,15 @@ export default function NavBar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Rechercher une publication"
+              placeholder="Rechercher un utilisateur"
               inputProps={{ 'aria-label': 'search' }}
+              autoFocus="true"
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  navigate(`/search/${e.target.value}`);
+                }
+
+              }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />

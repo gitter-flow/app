@@ -131,7 +131,7 @@ const EditorComponent = (props) => {
       .then(data => {
         setResultCode(data.output);
       });
-      
+
   }
 
   const typeCodeHanlder = (event) => {
@@ -193,7 +193,13 @@ const EditorComponent = (props) => {
           </Grid>
         }
         {
-          props.addPublication != "true" &&
+          props.isRepublish == "true" &&
+          <Grid item xs={2}>
+            <Button variant="contained" onClick={publish}>Republier</Button>
+          </Grid>
+        }
+        {
+          (props.addPublication != "true" && (props.isRepublish == undefined || props.isRepublish == "false")) &&
           <Grid item xs={3}>
             <Button variant="contained" onClick={update}>Enregistrer</Button>
           </Grid>

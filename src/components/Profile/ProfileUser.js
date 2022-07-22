@@ -307,7 +307,7 @@ const ProfileUser = ({route}) => {
             </Divider>
           </Grid>
           <Grid item xs={12} textAlign="center">
-            <CreateTeam></CreateTeam>
+            <CreateTeam teams={dataUser.teams}></CreateTeam>
           </Grid>
           {
             (dataUser.teams.length != 0 || dataUser.ownedTeams.length != 0) &&
