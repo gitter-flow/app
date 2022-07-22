@@ -166,8 +166,9 @@ export default function NavBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            Gitter
+            <u className={"app-tittle"}>Gitter</u>
           </Typography>
+          <img src={`/gitter.ico`} alt="image" className="header-photo"/>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -179,17 +180,6 @@ export default function NavBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/*<IconButton*/}
-            {/*  size="large"*/}
-            {/*  edge="end"*/}
-            {/*  aria-label="account of current user"*/}
-            {/*  aria-controls={menuId}*/}
-            {/*  aria-haspopup="true"*/}
-            {/*  onClick={handleProfileMenuOpen}*/}
-            {/*  color="inherit"*/}
-            {/*>*/}
-            {/*  <AccountCircle />*/}
-            {/*</IconButton>*/}
             {
               !selectedImage &&
               <Avatar aria-controls={menuId} src="/static/images/avatar/1.jpg" onClick={handleProfileMenuOpen} />

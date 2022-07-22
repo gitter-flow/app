@@ -35,11 +35,11 @@ export default function News() {
   const [open, setOpen] = React.useState(false);
   const [pageNumber, setPageNumber] = React.useState(0);
   const upPageNumber = () => {
-    init(pageNumber - 1);
+    init(pageNumber + 1);
     setPageNumber(pageNumber + 1);
   }
   const downPageNumber = () => {
-    init(pageNumber + 1);
+    init(pageNumber - 1);
     setPageNumber(pageNumber - 1);
   }
   const handleOpen = () => setOpen(true);
@@ -103,7 +103,7 @@ export default function News() {
     }
     axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/publication/all?page=${pageNumber}&size=10`,
+      url: `${process.env.REACT_APP_API_URL}/publication/all?page=${val}&size=10`,
       headers: {
         "Content-Type": "application/json",
       },

@@ -182,13 +182,16 @@ const EditorComponent = (props) => {
         <Grid item xs={2}>
           <Button variant="contained" onClick={Execute}>Éxecuter</Button>
         </Grid>
-        <Grid item xs={2} style={{display:executionPublication}}>
-          <Button variant="contained" onClick={publish}>Publier</Button>
-        </Grid>
+        {
+          props.addPublication == "true" &&
+          <Grid item xs={2}>
+            <Button variant="contained" onClick={publish}>Publier</Button>
+          </Grid>
+        }
         {
           props.addPublication != "true" &&
-          <Grid item xs={2} style={{display:executionPublication}}>
-            <Button variant="contained" onClick={update}>Update</Button>
+          <Grid item xs={3}>
+            <Button variant="contained" onClick={update}>Enregistrer</Button>
           </Grid>
         }
         <Grid item xs={2}>

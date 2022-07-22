@@ -20,6 +20,7 @@ import Menu from "../../containers/Menu/Menu";
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
+import {useNavigate} from "react-router-dom";
 
 const style_modal = {
   position: 'absolute',
@@ -44,28 +45,29 @@ const ProfileUser = ({route}) => {
     color: theme.palette.text.secondary,
   }));
   const [dataUser, setdataUser] = React.useState({
-    "id": "example",
-    "username": "f@gmail.com",
+    "id": "idUser",
+    "username": "",
     "numberOfFollowers": 0,
     "numberOfFollows": 0,
-    "teams": []
+    "teams": [],
+    "ownedTeams": []
   });
 
   const [dataPublication, setDataPublication] = React.useState( [
     {
-      "author": "Paul 2",
-      "content": "Ici le commentaire d'une publication",
-      "typeCode": "c",
+      "author": "",
+      "content": "",
+      "typeCode": "",
       "userId": "example",
       "likes":[],
       "code": {
-        "publicationId": "222c44ff-00ad-4734-8797-a456cc459212",
+        "publicationId": "",
         "codeType": null,
-        "code": "shell",
+        "code": "",
         "versions": [
           {
-            "codeVersion": "6829b3d9-5d82-473d-ba61-8972b7e5caeb",
-            "outputVersion": "4a05983d-917f-4e71-b605-262ec6caf09f"
+            "codeVersion": "",
+            "outputVersion": ""
           }
         ]
       },
@@ -73,10 +75,11 @@ const ProfileUser = ({route}) => {
       "parentPublicationUserName": ""
     },
   ]);
-
+  let navigate = useNavigate();
   const [userWhoFollows, setUserWhoFollows] = React.useState([]);
   const [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
+  const [userId, setUserId] = React.useState(null);
   let followModule;
 
   function getPicture(userId) {
@@ -140,7 +143,7 @@ const ProfileUser = ({route}) => {
   function getPubliFromUser() {
     axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/publication/user/${location.state.userId}?page=0&size=10`,
+      url: `${process.env.REACT_APP_API_URL}/publication/user/${userId}?page=0&size=10`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -188,13 +191,32 @@ const ProfileUser = ({route}) => {
       })
   }
 
+  const loadFromLocalStorage = () => {
+    try {
+      const stateStr = window.localStorage.getItem('userId');
+      setUserId(stateStr ? JSON.parse(stateStr).userId : undefined);
+      return stateStr ? JSON.parse(stateStr) : undefined;
+    } catch (e) {
+      console.error(e);
+      setUserId(undefined);
+      return undefined;
+    }
+  };
+
+
   useEffect(() => {
-    getPubliFromUser(location.state.userId);
-    getPicture(location.state.userId);
-    if (location.state) {
+    const temp = loadFromLocalStorage();
+    if (temp == null || temp == undefined || (location.state != undefined && location.state.userId != temp)) {
+      window.localStorage.setItem('userId', JSON.stringify(location.state));
+    }
+    console.log("location state : ");
+    console.log(location.state);
+    getPubliFromUser(userId);
+    getPicture(userId);
+    // if (location.state) {
       axios({
         method: "GET",
-        url: `${process.env.REACT_APP_API_URL}/user/${location.state.userId}`,
+        url: `${process.env.REACT_APP_API_URL}/user/${userId}`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -227,11 +249,11 @@ const ProfileUser = ({route}) => {
         .catch(err => {
           console.log("erreur : " + err);
         })
-    } else {
-      location.navigate("/");
-    }
+    // } else {
+    //   navigate("/");
+    // }
 
-  }, []);
+  }, [userId]);
 
 
   return (
@@ -261,14 +283,14 @@ const ProfileUser = ({route}) => {
               <ul className="flex-menu">
                 <li><strong>{dataUser.numberOfFollowers}</strong> <u>followers</u></li>
                 <li><strong>{dataUser.numberOfFollows}</strong> <u>follow</u></li>
-                {location.state.userId != cookies["userId"] &&
-                  <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={location.state.userId} followersId={userWhoFollows}></FollowUser></li>
+                {userId != cookies["userId"] &&
+                  <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={userId} followersId={userWhoFollows}></FollowUser></li>
                 }
               </ul>
             </div>
           </Grid>
           {
-            location.state.userId == cookies["userId"] &&
+            userId == cookies["userId"] &&
             <Grid item xs={12} md={12} textAlign="center">
               <div>
                 <h3>Changer mon image de profil</h3>
@@ -287,9 +309,12 @@ const ProfileUser = ({route}) => {
           <Grid item xs={12} textAlign="center">
             <CreateTeam></CreateTeam>
           </Grid>
+          {
+            (dataUser.teams.length != 0 || dataUser.ownedTeams.length != 0) &&
           <Grid item xs={12}>
-            <TeamList key={dataUser.teams} userTeams={dataUser.teams}/>
+            <TeamList key={dataUser.teams} userTeams={dataUser.teams} ownedTeam={dataUser.ownedTeams} mailUser={dataUser.username} profilUserId={userId}/>
           </Grid>
+          }
         </Grid>
         <Grid container>
           <Grid item xs={12} style={{"marginBottom": "2em", "marginTop": "3em"}}>

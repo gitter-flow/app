@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Nunito";
+  font-family: "Nunito_bold";
   src: local("Nunito-Bold"),
   url("../font/Nunito/Nunito-Bold.ttf") format("truetype");
   font-weight: bold;
@@ -17,6 +17,10 @@
   src: local("Nunito-Light"),
   url("../font/Nunito/Nunito-Light.ttf") format("truetype");
   font-weight: bold;
+}
+
+.app-tittle {
+  font-family: "Nunito_bold";
 }
 
 * {
