@@ -7,10 +7,12 @@ import Editor from "@monaco-editor/react";
 import { useCookies } from 'react-cookie';
 import axios from "axios";
 import {useEffect} from "react";
+import {useNavigate} from 'react-router-dom';
 
 
 const EditorComponent = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const navigate = useNavigate();
   const [contentCode, setContentCode] = React.useState(props.content);
   const [content, setContent] = React.useState();
   const isOwner = props.userId === cookies["userId"] // replace with cookie value
@@ -73,7 +75,8 @@ const EditorComponent = (props) => {
             console.log(`publication content : ${content}`);
             setResultCode(data.output);
           });
-      })
+          navigate(0);
+      });
   };
 
   const fork = async () => {
@@ -103,7 +106,8 @@ const EditorComponent = (props) => {
             console.log(data.output); // OUTPUT
             setResultCode(data.output);
           });
-      })
+      });
+      navigate(0);
   };
 
   const Execute = () => {
@@ -126,7 +130,8 @@ const EditorComponent = (props) => {
     })
       .then(data => {
         setResultCode(data.output);
-      })
+      });
+      
   }
 
   const typeCodeHanlder = (event) => {

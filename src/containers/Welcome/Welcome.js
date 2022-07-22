@@ -19,17 +19,17 @@ const Welcome = () => (
         <ul className="mini-features-list">
           <li>
             <h2>Gratuit et illimité</h2>
-            <span>Créer gratuitement des communautés publiques et privées avec un nombre de personnes, un historique de messagerie et un nombre d'intégrations illimités.</span>
+            <span>Communiquer avec un grand nombre de personnes à travers le monde avec un historique et un nombre d'intégrations illimités.</span>
           </li>
 
           <li>
             <h2>Création simple</h2>
-            <span>Il vous suffit tout simplement de créer votre communauté et de commencer une discussion - vous n'avez aucun service d'invitation à configurer.</span>
+            <span>Il vous suffit tout simplement de créer votre compte et de commencer une discussion.</span>
           </li>
 
           <li>
-            <h2>Monaco</h2>
-            <span>Formattez votre code comme avec vos autres outils de développement.</span>
+            <h2>Faites valider votre code !</h2>
+            <span>Formattez votre code comme avec votre IDE pour demander de l'aide à la communauté.</span>
           </li>
         </ul>
       </Grid>
@@ -37,13 +37,10 @@ const Welcome = () => (
         <h1>Conçu pour la collaboration entre communautés</h1>
         <p>
           Gitter est conçu pour rendre l'échange de messages, la collaboration et la découverte entre communautés aussi
-          fluides et simples que possible. Vous pouvez facilement créer, organiser et faire grandir votre communauté, en
-          invitant d'autres utilisateurs, en un seul clic.
+          fluides et simples que possible.
         </p>
         <p>
-          Nous fournissons également des intégrations pour GitHub, Trello, Jenkins, Travis CI, Heroku, Sentry,
-          BitBucket, HuBoard, Logentries, Pagerduty &amp; Sprintly. Nous acceptons les <i>webhooks</i> personnalisés,
-          nous avons un dépôt <i>open-source</i> pour les intégrations.
+          Site réalisé par des étudiants de l'ESGI par Paul BARRIE et Frédéric FLACELIERE.
         </p>
       </Grid>
     </Grid>

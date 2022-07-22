@@ -4,11 +4,12 @@ import Grid from '@mui/material/Grid';
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
+import {useNavigate} from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 const CreateTeam = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const navigate = useNavigate();
   const [content, setContent] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -37,7 +38,7 @@ const CreateTeam = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamName\":\""+ content +"\"}",
       "method": "POST"
-    }).then(response => {response.json()}).catch(error => {});
+    }).then(response => {response.json();navigate(0);}).catch(error => {});
     handleClose();
   }
 

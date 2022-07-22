@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { useCookies } from 'react-cookie';
+import {useNavigate} from 'react-router-dom';
 
 const style_modal = {
   position: 'absolute',
@@ -18,6 +19,7 @@ const style_modal = {
 
 const AddCommentary = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const navigate = useNavigate();
   const [content, setContent] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -34,7 +36,7 @@ const AddCommentary = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"content\":\"" + content + "\",\"publicationId\":\"" + props.publicationId + "\"}",
       "method": "POST"
-    }).then(response => {response.json()}).catch(error => {});
+    }).then(response => {response.json();navigate(0);}).catch(error => {});
     handleClose();
   };
   return(

@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { useCookies } from 'react-cookie';
+import {useNavigate} from 'react-router-dom';
 
 const style_modal = {
   position: 'absolute',
@@ -21,6 +22,7 @@ const style_modal = {
 
 const DeletePublication = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const navigate = useNavigate();
   const [content, setContent] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -37,7 +39,7 @@ const DeletePublication = (props) => {
       },
       "body": "{\"id\":\"" + props.publicationId + "\"}",
       "method": "DELETE"
-    }).then(response => {response.json()}).catch(error => {});
+    }).then(response => {response.json();navigate(0);}).catch(error => {});
     handleClose();
   };
   return(

@@ -5,12 +5,13 @@ import {useEffect} from "react";
 import axios from "axios";
 import { useCookies } from 'react-cookie';
 import React from "react";
+import {useNavigate} from 'react-router-dom';
 
 
 const FollowUser = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [follow, setFollow] = React.useState(true);
-
+  const navigate = useNavigate();
 
   const followAddHandleClick = () => {
     setFollow(true);

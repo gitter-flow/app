@@ -259,7 +259,7 @@ const Publication = (props) => {
               {open ? <ExpandLess onClick={handleClick} /> : <ExpandMore onClick={handleClick} />}
             </Tooltip>
           </ListItemIcon>
-          <ListItemIcon >
+          <ListItemIcon title="Récupérer">
             <ForkLeftSharpIcon onClick={handleClickRepublish} />
           </ListItemIcon>
           <ListItemIcon >
