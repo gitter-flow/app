@@ -37,7 +37,7 @@ const CreateTeam = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamName\":\""+ content +"\"}",
       "method": "POST"
-    });
+    }).then(response => {response.json()}).catch(error => {});
     handleClose();
   }
 

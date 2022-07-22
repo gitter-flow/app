@@ -97,7 +97,7 @@ const Publication = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"publicationId\":\""+ props.publicationId +"\"}",
       "method": "POST"
-    });
+    }).then(response => {response.json()}).catch(error => {});
 
 
   };
@@ -112,7 +112,7 @@ const Publication = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"publicationId\":\""+ props.publicationId +"\"}",
       "method": "POST"
-    });
+    }).then(response => {response.json()}).catch(error => {});
   };
   const ForkHandleClick = () => {
     setFork(!fork)

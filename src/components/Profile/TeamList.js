@@ -66,7 +66,7 @@ const TeamList = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + myTeamId + "\"}",
       "method": "DELETE"
-    });
+    }).then(response => {response.json()}).catch(error => {});
     setIsMemberOfTheTeam(false);
   }
 
@@ -79,7 +79,7 @@ const TeamList = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + myTeamId + "\"}",
       "method": "PUT"
-    });
+    }).then(response => {response.json()}).catch(error => {});
     setIsMemberOfTheTeam(false);
   }
 
@@ -264,7 +264,7 @@ const TeamList = (props) => {
         },
         "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + myTeams[0].teamId + "\"}",
         "method": "PUT"
-      });
+      }).then(response => {response.json()}).catch(error => {});
     } else {
       fetch(`${process.env.REACT_APP_API_URL}/team/join`, {
         "headers": {
@@ -274,7 +274,7 @@ const TeamList = (props) => {
         },
         "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + myTeamId + "\"}",
         "method": "PUT"
-      });
+      }).then(response => {response.json()}).catch(error => {});
     }
     setIsMemberOfTheTeam(true);
     handleClose();

@@ -172,13 +172,12 @@ const EditorComponent = (props) => {
           <p>{resultCode}</p>
         </Grid>
       </Grid>
-      <Grid container spacing={1} style={{"paddingTop":"1em"}} alignItems="flex-center" justifyContent="flex-end">
-        <Grid item xs={2}>
-
-        </Grid>
-        <Grid item xs={2} style={{display:CommentButtonVisibility}}>
-          <AddCommentary publicationId={props.publicationId}></AddCommentary>
-        </Grid>
+      <Grid container spacing={1} style={{"paddingTop":"1em"}} alignItems="flex-center" justifyContent="center">
+        { props.addPublication != "true" &&
+          <Grid item xs={3}>
+            <AddCommentary publicationId={props.publicationId}></AddCommentary>
+          </Grid>
+        }
         <Grid item xs={2}>
           <Button variant="contained" onClick={Execute}>Éxecuter</Button>
         </Grid>

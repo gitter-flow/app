@@ -34,7 +34,7 @@ const AddCommentary = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"content\":\"" + content + "\",\"publicationId\":\"" + props.publicationId + "\"}",
       "method": "POST"
-    });
+    }).then(response => {response.json()}).catch(error => {});
     handleClose();
   };
   return(

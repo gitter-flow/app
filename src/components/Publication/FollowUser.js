@@ -22,7 +22,7 @@ const FollowUser = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"userToFollowId\":\""+ props.publisherUserId +"\"}",
       "method": "PUT"
-    });
+    }).then(response => {response.json()}).catch(error => {});
   };
 
   const followRemoveHandleClick = () => {
@@ -35,7 +35,7 @@ const FollowUser = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"userToUnfollowId\":\""+ props.publisherUserId +"\"}",
       "method": "PUT"
-    });
+    }).then(response => {response.json()}).catch(error => {});
   };
 
   useEffect(() => {

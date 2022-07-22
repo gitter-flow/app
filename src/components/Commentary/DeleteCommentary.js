@@ -37,7 +37,7 @@ const DeleteCommentary = (props) => {
       },
       "body": "{\"id\":\"" + props.commentId + "\"}",
       "method": "DELETE"
-    });
+    }).then(response => {response.json()}).catch(error => {});
     handleClose();
   };
   return(

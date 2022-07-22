@@ -37,7 +37,7 @@ const DeletePublication = (props) => {
       },
       "body": "{\"id\":\"" + props.publicationId + "\"}",
       "method": "DELETE"
-    });
+    }).then(response => {response.json()}).catch(error => {});
     handleClose();
   };
   return(
