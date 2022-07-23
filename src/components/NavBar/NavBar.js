@@ -166,9 +166,9 @@ export default function NavBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            <u className={"app-tittle"}>Gitter</u>
+            <u className={"app-tittle"} onClick={() => navigate(`/`)} style={{"cursor": "pointer"}}>Gitter</u>
           </Typography>
-          <img src={`/gitter.ico`} alt="image" className="header-photo"/>
+          <img src={`/gitter.ico`} alt="image" className="header-photo" onClick={() => navigate(`/`)}/>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

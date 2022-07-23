@@ -17,9 +17,6 @@ const EditorComponent = (props) => {
   const [content, setContent] = React.useState();
   const isOwner = props.userId === cookies["userId"] // replace with cookie value
   const addPublication = props.addPublication ? "none" : "visible"
-  const readOnly = (addPublication==="none" || isOwner)
-  const executionPublication = props.addPublication? "visible" : "none"
-  const CommentButtonVisibility = props.addPublication? "none" : "visible"
   const [typeCode, setTypeCode] = React.useState(["c","shell","python"]);
   const [selectedTypeCode, setSelectedTypeCode] = React.useState(props.selectedTypeCode);
 
@@ -169,7 +166,7 @@ const EditorComponent = (props) => {
             defaultValue={contentCode}
             theme={props.theme}
             onChange={(value) => setContentCode(value)}
-            options={{readOnly: false}}
+            options={{readOnly: (props.addPublication != "true" && (props.isRepublish == undefined || props.isRepublish == "false")) && (props.publisherUserId == undefined || props.publisherUserId == cookies["userId"]).toString() == "true" ? "false":"true"}}
           />
         </Grid>
         <Grid item xs={6} md={6}>
@@ -183,9 +180,11 @@ const EditorComponent = (props) => {
             <AddCommentary publicationId={props.publicationId}></AddCommentary>
           </Grid>
         }
-        <Grid item xs={2}>
-          <Button variant="contained" onClick={Execute}>Éxecuter</Button>
-        </Grid>
+        { (props.addPublication == "true" || props.publisherUserId == undefined || props.publisherUserId == cookies["userId"]) &&
+          <Grid item xs={2}>
+            <Button variant="contained" onClick={Execute}>Éxecuter</Button>
+          </Grid>
+        }
         {
           props.addPublication == "true" &&
           <Grid item xs={2}>
@@ -195,17 +194,17 @@ const EditorComponent = (props) => {
         {
           props.isRepublish == "true" &&
           <Grid item xs={2}>
-            <Button variant="contained" onClick={publish}>Republier</Button>
+            <Button variant="contained" onClick={fork}>Republier</Button>
           </Grid>
         }
         {
-          (props.addPublication != "true" && (props.isRepublish == undefined || props.isRepublish == "false")) &&
+          (props.addPublication != "true" && (props.isRepublish == undefined || props.isRepublish == "false")) && (props.publisherUserId == undefined || props.publisherUserId == cookies["userId"]) &&
           <Grid item xs={3}>
             <Button variant="contained" onClick={update}>Enregistrer</Button>
           </Grid>
         }
         <Grid item xs={2}>
-            <select onChange={typeCodeHanlder} value={selectedTypeCode}>
+            <select onChange={typeCodeHanlder} value={selectedTypeCode} disabled={props.addPublication != "true"}>
               {typeCode.map((currElement, index) => <option key={currElement} value={currElement}>{currElement}</option>)}
             </select>
         </Grid>

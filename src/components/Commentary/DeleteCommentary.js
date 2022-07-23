@@ -27,8 +27,8 @@ const DeleteCommentary = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const userId = props.userId  // replace with cookie value
-  const publicationId = props.publicationId
+  const userId = props.userId;  // replace with cookie value
+  const publicationId = props.publicationId;
 
   const AddThisCommentary = () => {
     fetch(`${process.env.REACT_APP_API_URL}/comment`, {
@@ -39,7 +39,7 @@ const DeleteCommentary = (props) => {
       },
       "body": "{\"id\":\"" + props.commentId + "\"}",
       "method": "DELETE"
-    }).then(response => {response.json();navigate(0);}).catch(error => {});
+    }).then(response => {response.json();/*navigate(0);*/}).catch(error => {});
     handleClose();
   };
   return(

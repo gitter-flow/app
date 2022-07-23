@@ -130,8 +130,8 @@ const Publication = (props) => {
       data: {"none":"none"}
     })
       .then(async (value) => {
-        setUpdateKey(updateKey+1);
         setCode(value.data);
+        setUpdateKey(updateKey+1);
       })
       .catch(err => {
         console.log("erreur : " + err);
@@ -179,7 +179,7 @@ const Publication = (props) => {
 
     axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/comment/${props.publicationId}?page=0&size=10`,
+      url: `${process.env.REACT_APP_API_URL}/comment/${props.publicationId}?page=0&size=100`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -298,6 +298,7 @@ const Publication = (props) => {
             height='400'
             key={updateKey}
             //defaultLanguage={props.typeCode}
+            publisherUserId={props.publisherUserId}
             defaultValue=""
             theme='vs-dark'
             selectedTypeCode={props.selectedCode}

@@ -12,9 +12,12 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import EditCommentary from "./EditCommentary";
 import { useCookies } from 'react-cookie';
 import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
+import axios from "axios";
 
 const Commentary = (props) => {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const [selectedImage, setSelectedImage] = React.useState(null);
   let navigate = useNavigate();
 
   const [content, setContent] = React.useState("");
@@ -23,6 +26,28 @@ const Commentary = (props) => {
   const [edit, setEdit] = React.useState(false);
 
   const [like, setLike] = React.useState(true);
+
+  function getPicture(userId) {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/picture/${userId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none": "none"}
+    })
+      .then((data) => {
+        setSelectedImage(data.data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+        setSelectedImage("");
+      })
+  }
+
+  useEffect(() => {
+    getPicture(props.publisherUserId);
+  }, []);
 
   const FavHandleClick = () => {
     setLike(!like)
@@ -46,7 +71,14 @@ const Commentary = (props) => {
       {/*{edit ? <EditCommentary publicationId={"userId"} content={props.content} commentaryId={props.commentaryId} userId={"userId"}/> : null}*/}
       <ListItem alignItems="flex-start">
         <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
-          <Avatar alt="Remy Sharp" src={props.img} />
+          {
+            selectedImage == "" &&
+            <Avatar alt={props.author} src="/static/images/avatar/1.jpg" />
+          }
+          {
+            selectedImage != "" &&
+            <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="publication-photo"/>
+          }
         </ListItemAvatar>
         <ListItemText
           secondary={
@@ -66,11 +98,11 @@ const Commentary = (props) => {
           }
         />
         {props.publisherUserId == cookies["userId"] &&
-          <DeleteCommentary commentId={""}></DeleteCommentary>
+          <DeleteCommentary commentId={props.commentId}></DeleteCommentary>
         }
         {/*<Button  style={{visibility:buttonVisibility}} onClick={EditThisCommentary}>Edit</Button>{ like ? <FavoriteIcon  onClick={FavHandleClick} /> : <FavoriteIcon style={{color: 'red' }} onClick={FavHandleClick} />}{like ? props.like :props.like+1}*/}
       </ListItem>
-      <Divider variant="inset" component="li" />
+      {/*<Divider variant="inset" component="li" />*/}
 
 
     </List>
