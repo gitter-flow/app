@@ -57,9 +57,9 @@ const Publication = (props) => {
   const handleClose = () => setOpenRepublish(false);
   const [dataCommentary, setDataCommentary] = React.useState( [
     {
-      "username": "f@gmail.com",
-      "userId": "ee70149e-64c3-4772-942e-9017c32a8477",
-      "content": "Je commente",
+      "username": "",
+      "userId": "",
+      "content": "",
       "likes": []
     }
   ]);

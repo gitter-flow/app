@@ -34,9 +34,6 @@ const EditorComponent = (props) => {
       "method": "POST"
     }).then(response=>response.json())
       .then(data=>{
-        console.log(`code id :`);
-        console.log(data);
-        console.log(`publication content : ${content}`);
         setResultCode(data.output);
       });
   }
@@ -89,7 +86,9 @@ const EditorComponent = (props) => {
     }).then(response=>response.json())
       .then(data => {
         publicationId = data.id;
-        let codeFormated = contentCode.replaceAll("\"", "\\\"");
+        let codeFormated = contentCode.replaceAll("\\", "\\\\")
+          .replaceAll("\"", "\\\"")
+          .replaceAll("\n","\\n");
         fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
           "headers": {
             "accept": "application/json",
@@ -109,8 +108,9 @@ const EditorComponent = (props) => {
 
   const Execute = () => {
 
-    let codeFormated = contentCode.replaceAll("\"", "\\\"");
-
+    let codeFormated = contentCode.replaceAll("\\", "\\\\")
+      .replaceAll("\"", "\\\"")
+      .replaceAll("\n","\\n");
     fetch(`${process.env.REACT_APP_API_URL}/code/run`, {
       "headers": {
         "accept": "application/json",
@@ -126,7 +126,8 @@ const EditorComponent = (props) => {
       return response.json();
     })
       .then(data => {
-        setResultCode(data.output);
+        let result = data.output;
+        setResultCode(result);
       });
 
   }
@@ -137,7 +138,9 @@ const EditorComponent = (props) => {
 
   useEffect(() => {
     if (props.content && props.content != '' ) {
-      let codeFormated = props.content.replaceAll("\"", "\\\"");
+      let codeFormated = contentCode.replaceAll("\\", "\\\\")
+        .replaceAll("\"", "\\\"")
+        .replaceAll("\n","\\n");
       fetch(`${process.env.REACT_APP_API_URL}/code/run`, {
         "headers": {
           "accept": "application/json",
@@ -166,12 +169,12 @@ const EditorComponent = (props) => {
             defaultValue={contentCode}
             theme={props.theme}
             onChange={(value) => setContentCode(value)}
-            options={{readOnly: (props.addPublication != "true" && (props.isRepublish == undefined || props.isRepublish == "false")) && (props.publisherUserId == undefined || props.publisherUserId == cookies["userId"]).toString() == "true" ? "false":"true"}}
+            options={{readOnly: (props.addPublication != "true" || (props.isRepublish == undefined || props.isRepublish == "false")) && (props.publisherUserId == undefined || props.publisherUserId == cookies["userId"]).toString() == "true" ? "false":"true"}}
           />
         </Grid>
         <Grid item xs={6} md={6}>
           <h3>Résultat</h3>
-          <p>{resultCode}</p>
+          <p >{resultCode}</p>
         </Grid>
       </Grid>
       <Grid container spacing={1} style={{"paddingTop":"1em"}} alignItems="flex-center" justifyContent="center">
