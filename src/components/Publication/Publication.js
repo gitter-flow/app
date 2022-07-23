@@ -67,7 +67,7 @@ const Publication = (props) => {
   const [openRepublish, setOpenRepublish] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [code, setCode] = React.useState(null);
-  const [selectedVersion, setSelectedVersion] = React.useState(props.versions[0]);
+  const [selectedVersion, setSelectedVersion] = React.useState(props.versions[props.versions.length - 1]);
   const [updateKey, setUpdateKey] = React.useState(0);
   const [like, setLike] = React.useState(true);
   const [numberLike, setnumberLike] = React.useState("0");
