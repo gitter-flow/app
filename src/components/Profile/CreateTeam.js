@@ -29,16 +29,26 @@ const CreateTeam = (props) => {
     handleOpen();
   }
 
-  function creation() {
+  const creation = async(e) => {
+    e.preventDefault();
     fetch(`${process.env.REACT_APP_API_URL}/team`, {
       "headers": {
         "accept": "application/json",
         "authorization": `Bearer ${cookies["keycloaktoken"]}`,
         "content-type": "application/json",
       },
+      "credentials": 'include',
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamName\":\""+ content +"\"}",
       "method": "POST"
-    }).then(response => {response.json();navigate(0);}).catch(error => {});
+    }).then(response => {
+      const resp = response.json();
+      console.log("_________________")
+      console.log(resp)
+      console.log(props.team)
+      console.log("_________________")
+      // props.team.add()
+    
+    }).catch(error => {});
     handleClose();
   }
 
@@ -63,7 +73,7 @@ const CreateTeam = (props) => {
                 <input type={"text"} onChange={(e) => setContent(e.target.value)} style={{"minWidth":"-webkit-fill-available","maxWidth":"-webkit-fill-available"}}/>
               </Grid>
               <Grid item xs={3}>
-                <Button color={"success"} variant="contained" onClick={creation} style={{"margin": "1em"}}>Confirmer</Button>
+                <Button color={"success"} variant="contained" onClick={(e => {creation(e)})} style={{"margin": "1em"}}>Confirmer</Button>
               </Grid>
             </Grid>
           </Typography>

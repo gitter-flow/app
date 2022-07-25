@@ -309,7 +309,7 @@ const Publication = (props) => {
           />
         </List>
         {
-          dataCommentary.length != 0 &&
+          dataCommentary.length !== 0 &&
             <div>
               {dataCommentary.map((curr, index) => {return (<Item class={"item-commentary"}><Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/></Item>)})}
             </div>

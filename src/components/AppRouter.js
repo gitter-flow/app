@@ -8,7 +8,7 @@ import ProfileUser from "../components/Profile/ProfileUser";
 import Welcome from "../containers/Welcome/Welcome";
 import Footer from "./Footer/Footer";
 import { CookiesProvider } from 'react-cookie';
-
+import Search from "./Search/Search";
 
 const AppRouter = () => {
   const {initialized} = useKeycloak();
@@ -28,11 +28,16 @@ const AppRouter = () => {
                        element={<PrivateRoute>
                          <Home/>
                        </PrivateRoute>}/>
-                <Route path="/" component={Welcome}/>
+                <Route exact path='/search/:username' 
+                            element={<PrivateRoute>
+                                <Search/>
+                            </PrivateRoute>}/>
                 <Route exact path='/profile'
                        element={<PrivateRoute>
                          <ProfileUser/>
                        </PrivateRoute>}/>
+                <Route path="/" component={Welcome}/>
+                
               </Routes>
             </div>
           </BrowserRouter>
