@@ -40,7 +40,7 @@ const Welcome = () => (
           fluides et simples que possible.
         </p>
         <p>
-          Site réalisé par des étudiants de l'ESGI par Paul BARRIE et Frédéric FLACELIERE.
+          Site réalisé par des étudiants de l'ESGI.
         </p>
       </Grid>
     </Grid>

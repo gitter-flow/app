@@ -6,7 +6,6 @@ const AddPublication = (props) => {
   const [content, setContent] = React.useState("");
 
 
-
   return (
     <>
       <div>
@@ -26,6 +25,7 @@ const AddPublication = (props) => {
         parentPublicationId={props.parentPublicationId}
         addPublication={props.addPublication}
         isRepublish={props.isRepublish}
+        updatePublication={props.updatePublication}
       />
     </>
   );

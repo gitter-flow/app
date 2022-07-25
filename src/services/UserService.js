@@ -21,6 +21,13 @@ const initKeycloak = (onAuthenticatedCallback) => {
         console.log("user is authenticated..!");
         document.cookie = "keycloaktoken=" + keycloak.token;
         document.cookie = "userId=" + getuserId();
+        document.cookie = "username=" + getUsername();
+
+        // keycloak.loadUserProfile(() => {
+        //   console.log("user profile loaded..!");
+        //   console.log(keycloak.profile.username);
+        //   document.cookie = "username=" + keycloak.profile.username;
+        // })
       }
       onAuthenticatedCallback();
     })

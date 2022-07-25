@@ -23,7 +23,9 @@ const EditorComponent = (props) => {
   const [resultCode, setResultCode] = React.useState(props.content);
 
   const update = () => {
-    let codeFormated = contentCode.replaceAll("\"", "\\\"");
+    let codeFormated = contentCode.replaceAll("\\", "\\\\")
+    .replaceAll("\"", "\\\"")
+    .replaceAll("\n","\\n");
     fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
       "headers": {
         "accept": "application/json",
@@ -39,7 +41,9 @@ const EditorComponent = (props) => {
   }
 
   const publish = async ()=>{
-    let codeFormated = contentCode.replaceAll("\"", "\\\"");
+    let codeFormated = contentCode.replaceAll("\\", "\\\\")
+    .replaceAll("\"", "\\\"")
+    .replaceAll("\n","\\n");
     let publicationId;
     await fetch(`${process.env.REACT_APP_API_URL}/publication`, {
       "headers": {
@@ -63,13 +67,31 @@ const EditorComponent = (props) => {
           "body": "{\"publicationId\":\"" + publicationId + "\",\"codeType\":\"" + selectedTypeCode + "\",\"code\":\"" + codeFormated + "\"}",
           "method": "POST"
         }).then(response=>response.json())
-          .then(data=>{
-            console.log(`code id :`);
-            console.log(data);
-            console.log(`publication content : ${content}`);
+          .then(data => {
             setResultCode(data.output);
+            props.updatePublication([{
+              "author": cookies["username"],
+              "username": cookies["username"],
+              "content": props.contentMessageAdd,
+              "typeCode": selectedTypeCode,
+              "userId": cookies["userId"],
+              "likes":[],
+              "code": {
+                "publicationId": publicationId,
+                "codeType": selectedTypeCode,
+                "code": contentCode,
+                "versions": [
+                  {
+                    "codeVersion": "",
+                    "outputVersion": ""
+                  }
+                ]
+              },
+              "parentPublicationId": "",
+              "parentPublicationUserName": ""
+            }]);
           });
-          navigate(0);
+          
       });
   };
 
@@ -212,6 +234,7 @@ const EditorComponent = (props) => {
             </select>
         </Grid>
       </Grid>
+      {/* <Alert severity="success">Publication créée !</Alert> */}
     </List>
   );
 }

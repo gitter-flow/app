@@ -16,7 +16,7 @@ import axios from "axios";
 import { useCookies } from 'react-cookie';
 import "./home.css";
 import Menu from "../containers/Menu/Menu";
-
+import Loader from "../components/Loader/Loader";
 
 
 const style_modal = {
@@ -34,6 +34,7 @@ export default function News() {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const [open, setOpen] = React.useState(false);
   const [pageNumber, setPageNumber] = React.useState(0);
+  const [isLoaded, setIsLoaded] = React.useState(false);
   const upPageNumber = () => {
     init(pageNumber + 1);
     setPageNumber(pageNumber + 1);
@@ -75,6 +76,11 @@ export default function News() {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
+  function updateDataPublication(publication) {
+    setDataPublication(publication.concat(dataPublication));
+    handleClose();
+  }
 
   async function getCodeFromPublication(codeId) {
     let res;
@@ -149,11 +155,16 @@ export default function News() {
       .catch(err => {
         console.log("erreur : " + err);
       })
+      setIsLoaded(true);
   }
 
   useEffect(() => {
     init(0);
-  }, []);
+  }, [isLoaded]);
+
+  if(!isLoaded) {
+    return <Loader/>
+  }
 
   return (
     <div>
@@ -168,7 +179,7 @@ export default function News() {
         >
           <Box sx={style_modal}>
             <h2>Nouvelle publication</h2>
-            <AddPublication typeCode="c" addPublication={"true"}/>
+            <AddPublication typeCode="c" addPublication={"true"} updatePublication={updateDataPublication}/>
           </Box>
         </Modal>
         <Grid container spacing={2}>
@@ -190,7 +201,7 @@ export default function News() {
             <p style={{"textAlign": "center"}}>Page {pageNumber}</p>
           </Grid>
           <Grid item xs={2} style={{"textAlign": "right"}}>
-            <Button disabled={dataPublication.length != 10} onClick={upPageNumber}>Page suivante</Button>
+            <Button disabled={dataPublication.length < 10} onClick={upPageNumber}>Page suivante</Button>
           </Grid>
         </Grid>
 

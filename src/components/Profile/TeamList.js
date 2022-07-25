@@ -81,6 +81,8 @@ const TeamList = (props) => {
       "method": "PUT"
     }).then(response => {response.json()}).catch(error => {});
     setIsMemberOfTheTeam(false);
+    // setMemberOfTeam(memberOfTeam.filter(team => {return team.teamId != myTeamId}));
+    setMemberOfMyTeam(memberOfMyTeam.filter(team => {return team.userId === cookies["userId"]}));
   }
 
 
