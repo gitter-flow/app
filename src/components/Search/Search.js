@@ -14,6 +14,7 @@ import axios from "axios";
 import { useCookies } from 'react-cookie';
 import "../home.css";
 import NavBar from '../NavBar/NavBar';
+import {useNavigate} from "react-router-dom";
 
 const style_modal = {
   position: 'absolute',
@@ -28,6 +29,12 @@ const style_modal = {
 
 export default function Search() {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const [loaded, setLoaded] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [selectedImage, setSelectedImage] = React.useState(null);
+  let navigate = useNavigate();
+
+
   const { username } = useParams();
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -38,20 +45,44 @@ export default function Search() {
     color: theme.palette.text.secondary,
   }));
   
+  function getPicture(userId) {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/picture/${userId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {"none": "none"}
+    })
+      .then((data) => {
+        setSelectedImage(data.data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+  }
+
   let userlist = getSearchResults(username);
 
   async function getSearchResults(search) {
     let res;
     await axios({
       method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/user/search/${username}`,
+      url: `${process.env.REACT_APP_API_URL}/user/search/${username}/?page=0&size=50`,
       headers: {
         "Content-Type": "application/json",
       },
       data: {"none":"none"}
     })
-      .then(value => {
-        res = value.data;
+      .then((resp) => {
+        res = resp.json();
+        console.log(res);
+
+        res.forEach(element => {
+          getPicture(element.userId);
+        });
+
+        setUserList(res);
       })
       .catch(err => {
         console.log("erreur : " + err);
@@ -75,15 +106,24 @@ export default function Search() {
         {/*<Divider variant="inset" component="li" />*/}
         <Grid container spacing={2}>
           <Grid item xs={2}>
-            {userlist.map(u => {
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Brunch this weekend?"
-                />
-            </ListItem>
+            {userList.map(u => {
+              return (
+                <ListItem alignItems="flex-start">
+                  <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: u.userId}})} style={{"cursor": "pointer"}}>
+                  {
+                    !selectedImage &&
+                    <Avatar src="/static/images/avatar/1.jpg" />
+                  }
+                  {
+                    selectedImage &&
+                    <img key={selectedImage} src={`data:image/png;base64,${selectedImage}`} alt="image de profil" className="profile-photo"/>
+                  }
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Brunch this weekend?"
+                  >{u.username}</ListItemText>
+                </ListItem>
+              );
 
             })}
             <Item onClick={console.log("click")} style={{"cursor": "pointer"}}/>
