@@ -67,7 +67,6 @@ export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [selectedImage, setSelectedImage] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event) => {
@@ -179,7 +178,7 @@ export default function NavBar() {
               autoFocus="true"
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
-                  navigate(`/search/${e.target.value}`);
+                  navigate(`/search/${e.target.value}`, {replace: true});
                 }
 
               }}

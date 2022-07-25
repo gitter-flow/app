@@ -15,6 +15,8 @@ import { useCookies } from 'react-cookie';
 import "../home.css";
 import NavBar from '../NavBar/NavBar';
 import {useNavigate} from "react-router-dom";
+import Loader from '../Loader/Loader';
+
 
 const style_modal = {
   position: 'absolute',
@@ -35,7 +37,7 @@ export default function Search() {
   let navigate = useNavigate();
 
 
-  const { username } = useParams();
+  let { username } = useParams();
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -62,11 +64,14 @@ export default function Search() {
       })
   }
 
-  let userlist = getSearchResults(username);
-
-  async function getSearchResults(search) {
+  useEffect(() => {
+    getSearchResults(username);
+  }, [username]);
+  
+  
+  function getSearchResults(search) {
     let res;
-    await axios({
+    axios({
       method: "GET",
       url: `${process.env.REACT_APP_API_URL}/user/search/${username}/?page=0&size=50`,
       headers: {
@@ -75,29 +80,29 @@ export default function Search() {
       data: {"none":"none"}
     })
       .then((resp) => {
-        res = resp.json();
-        console.log(res);
-
-        res.forEach(element => {
+        console.log(resp.data);
+        resp.data.forEach(element => {
           getPicture(element.userId);
+          
         });
-
-        setUserList(res);
+        setUserList(resp.data);
+        setLoaded(true);
       })
       .catch(err => {
         console.log("erreur : " + err);
       })
-    return res;
+    // return res;
   }
 
-  if (userlist.length === 0) {
-    return (
-      <div className='search'>
-        <NavBar/>
-        <h1>Aucun utilisateur ne correspond à la recherche {username} </h1>
-    </div>
-    );
-  }
+  // if(!loaded) {
+  //   return (
+  //     <div className='search'>
+  //       <NavBar/>
+  //       <Loader/>
+  //     </div>
+  //   );
+  // }
+
 
   return (
     <div className='search'>
@@ -105,11 +110,21 @@ export default function Search() {
         <List sx={{ width: '100%'}} className="search">
         {/*<Divider variant="inset" component="li" />*/}
         <Grid container spacing={2}>
-          <Grid item xs={2}>
+        <Grid item xs={0} md={2}>
+        </Grid>
+        { userList.length == 0 &&
+          <Grid item xs={6}>
+            <div className='search'>
+              <h2>Aucun utilisateur ne correspond à la recherche {username} </h2>
+            </div>
+          </Grid>
+        }
+        { userList.length != 0 &&
+          <Grid item xs={8}>
             {userList.map(u => {
               return (
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: u.userId}})} style={{"cursor": "pointer"}}>
+                <ListItem alignItems="flex-start" onClick={() => navigate(`/profile`, {state:{userId: u.userId}})} style={{"cursor": "pointer"}} className={"image-search"}>
+                  <ListItemAvatar>
                   {
                     !selectedImage &&
                     <Avatar src="/static/images/avatar/1.jpg" />
@@ -120,7 +135,7 @@ export default function Search() {
                   }
                   </ListItemAvatar>
                   <ListItemText
-                    primary="Brunch this weekend?"
+                    primary={u.username}
                   >{u.username}</ListItemText>
                 </ListItem>
               );
@@ -128,6 +143,7 @@ export default function Search() {
             })}
             <Item onClick={console.log("click")} style={{"cursor": "pointer"}}/>
           </Grid>
+        }
         </Grid>
       </List>
     </div>
