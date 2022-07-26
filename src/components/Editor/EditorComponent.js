@@ -24,8 +24,8 @@ const EditorComponent = (props) => {
 
   const update = () => {
     let codeFormated = contentCode.replaceAll("\\", "\\\\")
-    .replaceAll("\"", "\\\"")
-    .replaceAll("\n","\\n");
+      .replaceAll("\"", "\\\"")
+      .replaceAll("\n","\\n");
     fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
       "headers": {
         "accept": "application/json",
@@ -42,8 +42,8 @@ const EditorComponent = (props) => {
 
   const publish = async ()=>{
     let codeFormated = contentCode.replaceAll("\\", "\\\\")
-    .replaceAll("\"", "\\\"")
-    .replaceAll("\n","\\n");
+      .replaceAll("\"", "\\\"")
+      .replaceAll("\n","\\n");
     let publicationId;
     await fetch(`${process.env.REACT_APP_API_URL}/publication`, {
       "headers": {
@@ -55,9 +55,8 @@ const EditorComponent = (props) => {
       "method": "POST"
     }).then(response=>response.json())
       .then(data=>{
-        console.log(data.id);
         publicationId = data.id;
-
+        console.log("publi id : " + publicationId);
         fetch(`${process.env.REACT_APP_API_URL}/code/save`, {
           "headers": {
             "accept": "application/json",
@@ -76,6 +75,7 @@ const EditorComponent = (props) => {
               "typeCode": selectedTypeCode,
               "userId": cookies["userId"],
               "likes":[],
+              "id": publicationId,
               "code": {
                 "publicationId": publicationId,
                 "codeType": selectedTypeCode,
@@ -91,7 +91,7 @@ const EditorComponent = (props) => {
               "parentPublicationUserName": ""
             }]);
           });
-          
+
       });
   };
 
@@ -125,7 +125,7 @@ const EditorComponent = (props) => {
             setResultCode(data.output);
           });
       });
-      navigate(0);
+    navigate(0);
   };
 
   const Execute = () => {
@@ -229,9 +229,9 @@ const EditorComponent = (props) => {
           </Grid>
         }
         <Grid item xs={2}>
-            <select onChange={typeCodeHanlder} value={selectedTypeCode} disabled={props.addPublication != "true"}>
-              {typeCode.map((currElement, index) => <option key={currElement} value={currElement}>{currElement}</option>)}
-            </select>
+          <select onChange={typeCodeHanlder} value={selectedTypeCode} disabled={props.addPublication != "true"}>
+            {typeCode.map((currElement, index) => <option key={currElement} value={currElement}>{currElement}</option>)}
+          </select>
         </Grid>
       </Grid>
       {/* <Alert severity="success">Publication créée !</Alert> */}

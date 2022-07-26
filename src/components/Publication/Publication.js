@@ -273,9 +273,9 @@ const Publication = (props) => {
           {props.publisherUserId == cookies["userId"] &&
             <DeletePublication publicationId={props.publicationId}/>
           }
-          <ListItemIcon style={{textAlign:''}}>
+          {/* <ListItemIcon style={{textAlign:''}}>
             <FollowUser key={userWhoFollowsUpdate} publisherUserId={props.publisherUserId} followersId={userWhoFollows}></FollowUser>
-          </ListItemIcon>
+          </ListItemIcon> */}
           <ListItemIcon style={{textAlign:''}}>
             {props.versions != "" &&
               <select value={selectedVersion} onChange={changeVersion}>

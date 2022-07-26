@@ -34,7 +34,7 @@ const AddCommentary = (props) => {
         "authorization": `Bearer ${cookies["keycloaktoken"]}`,
         "content-type": "application/json",
       },
-      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"content\":\"" + content + "\",\"publicationId\":\"" + props.publicationId + "\"}",
+      "body": "{\"userId\":\"" + cookies["userId"] + "\",\"content\":\"" + content.replaceAll("\n","\\n") + "\",\"publicationId\":\"" + props.publicationId + "\"}",
       "method": "POST"
     }).then(response => {response.json();navigate(0);}).catch(error => {});
     handleClose();

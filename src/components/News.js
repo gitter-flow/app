@@ -65,7 +65,7 @@ export default function News() {
         ]
       },
       "parentPublicationId": "",
-      "parentPublicationUserName": ""
+      "parentPublicationUsername": ""
     },
   ]));
 
@@ -129,7 +129,9 @@ export default function News() {
                 return i;
               }
             });
-            publication.parentPublicationUserName = filteredObj.username;
+            if(filteredObj)
+              publication.parentPublicationUserName = filteredObj.username;
+            
           }
         }
 
@@ -189,7 +191,7 @@ export default function News() {
           <Grid item xs={8}>
             {
               dataPublication.length != 0 &&
-                dataPublication.map((curr, index) => { return (<Item class={"item-publication"}><Publication style={{"marginBottom": "2em"}} key={index} codeId={curr.codeId} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions.reverse() : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUserName}/></Item>)})
+                dataPublication.map((curr, index) => { return (<Item class={"item-publication"}><Publication style={{"marginBottom": "2em"}} key={index} codeId={curr.codeId} publicationId={curr.id} height={400} author={curr.username} selectedCode={curr.code ? curr.code.codeType : ""} code={curr.code ? curr.code.code : ""} versions={curr.code ? curr.code.versions.reverse() : ""} content={curr.content} publisherUserId={curr.userId} followersId={userWhoFollows} like={curr.likes} parentPublicationId={curr.parentPublicationId} parentPublicationUserName={curr.parentPublicationUsername}/></Item>)})
             }
           </Grid>
           <Grid item xs={3}>

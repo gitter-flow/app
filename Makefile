@@ -1,7 +1,7 @@
 IMAGE=quay.io/gitter/gitter-app
 TAG_DEV=latest
 DOCKERFILE_DEV=Dockerfile
-TAG_PROD=1.0.0
+TAG_PROD=latest
 DOCKERFILE_PROD=Dockerfile_prod
 BUILD_DIR=.
 SOCIAL_API_URL_PROD=https://api.gitter.uk
