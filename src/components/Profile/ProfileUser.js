@@ -260,7 +260,7 @@ const ProfileUser = () => {
                 <li><strong>{dataUser.numberOfFollowers}</strong> <u>followers</u></li>
                 <li><strong>{dataUser.numberOfFollows}</strong> <u>follow</u></li>
                 {userId != cookies["userId"] &&
-                  <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={userId} followersId={userWhoFollows}></FollowUser></li>
+                  <li><FollowUser key={userWhoFollowsUpdate} publisherUserId={cookies["userId"]} followersId={userWhoFollows}></FollowUser></li>
                 }
               </ul>
             </div>
