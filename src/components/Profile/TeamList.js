@@ -8,6 +8,7 @@ import Modal from "@mui/material/Modal";
 import Grid from '@mui/material/Grid';
 import { useCookies } from 'react-cookie';
 import {useEffect} from "react";
+import {useNavigate} from 'react-router-dom';
 
 
 const style_modal = {
@@ -34,6 +35,7 @@ const TeamList = (props) => {
   const [myTeamId, setMyTeamId] = React.useState("");
   const [memberOfTeam, setMemberOfTeam] = React.useState([]);
   const [memberOfMyTeam, setMemberOfMyTeam] = React.useState([]);
+  const navigate = useNavigate();
 
   const teamHanlder = (event) => {
     setTeamId(event.target.value);
@@ -66,7 +68,7 @@ const TeamList = (props) => {
       },
       "body": "{\"userId\":\"" + cookies["userId"] + "\",\"teamId\":\"" + myTeamId + "\"}",
       "method": "DELETE"
-    }).then(response => {response.json()}).catch(error => {});
+    }).then(response => {response.json(); navigate(0);}).catch(error => {});
     setIsMemberOfTheTeam(false);
   }
 

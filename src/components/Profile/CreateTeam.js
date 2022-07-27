@@ -42,12 +42,7 @@ const CreateTeam = (props) => {
       "method": "POST"
     }).then(response => {
       const resp = response.json();
-      console.log("_________________")
-      console.log(resp)
-      console.log(props.team)
-      console.log("_________________")
-      // props.team.add()
-    
+      navigate(0);
     }).catch(error => {});
     handleClose();
   }
