@@ -90,24 +90,13 @@ export default function Search() {
       .catch(err => {
         console.log("erreur : " + err);
       })
-    // return res;
   }
-
-  // if(!loaded) {
-  //   return (
-  //     <div className='search'>
-  //       <NavBar/>
-  //       <Loader/>
-  //     </div>
-  //   );
-  // }
 
 
   return (
     <div className='search'>
         <NavBar/>
         <List sx={{ width: '100%'}} className="search">
-        {/*<Divider variant="inset" component="li" />*/}
         <Grid container spacing={2}>
         <Grid item xs={0} md={2}>
         </Grid>
@@ -122,7 +111,7 @@ export default function Search() {
           <Grid item xs={8}>
             {userList.map(u => {
               return (
-                <ListItem alignItems="flex-start" onClick={() => navigate(`/profile`, {state:{userId: u.userId}})} style={{"cursor": "pointer"}} className={"image-search"}>
+                <ListItem alignItems="flex-start" onClick={() => navigate(`/profile/${u.userId}`)} style={{"cursor": "pointer"}} className={"image-search"}>
                   <ListItemAvatar>
                   {
                     !selectedImage &&

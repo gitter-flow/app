@@ -112,20 +112,20 @@ const ProfileUser = () => {
   }
 
   function getPicture(userId) {
-    fetch(`${process.env.REACT_APP_API_URL}/user/picture/${userId}`,{
-      "method": "GET",
-      "headers": {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/picture/${userId}`,
+      headers: {
         "Content-Type": "application/json",
       },
-    }).then(resp => {
-      return resp.json() 
+      data: {"none": "none"}
     })
       .then((data) => {
-        setSelectedImage(data);
+        setSelectedImage(data.data);
       })
       .catch(err => {
         console.log("erreur : " + err);
-        setSelectedImage(null);
+        setSelectedImage("");
       })
   }
 
@@ -148,67 +148,66 @@ const ProfileUser = () => {
 
     getPicture(userId);
 
-    // axios.post(`${process.env.REACT_APP_API_URL}/user/picture/${cookies["userId"]}`, formData);
   };
 
   function getCodeFromPublication(codeId) {
-    let res;
-    fetch(`${process.env.REACT_APP_API_URL}/code/${codeId}`,{
-      "method": "GET",
-      "headers": {
+    return  axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/code/${codeId}`,
+      headers: {
         "Content-Type": "application/json",
       },
-    }).then(data => {
-      return data.json()
-      })
-      .then(data => {
-        res = data;
-      })
+      data: {"none":"none"}
+    })
       .catch(err => {
         console.log("erreur : " + err);
       })
-    return res;
   }
 
   function getPubliFromUser() {
-    fetch(`${process.env.REACT_APP_API_URL}/publication/user/${userId}?page=0&size=10`,{
-      "method": "GET",
-      "headers": {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/publication/user/${userId}?page=0&size=10`,
+      headers: {
         "Content-Type": "application/json",
       },
-    }).then((resp) => {
-      return resp.json()
-      })
-      .then((data) => {
-        for (let publication of data) {
+      data: {"none":"none"}
+    })
+      .then(async (value) => {
+        for (let publication of value.data) {
           if (publication.codeId != null)
-            getCodeFromPublication(publication.codeId).then(res => {
-              publication.code = res
+            await getCodeFromPublication(publication.codeId).then(res => {
+              if(res) {
+                publication.code = res.data;
+              }
             });
 
           if (publication.parentPublicationId) {
-            var filteredObj = data.find(function(item, i){
+
+            var filteredObj = value.data.find(function(item, i){
               if(publication.parentPublicationId === item.parentPublicationId){
-                return i;
+                return item;
               }
-              return null;
             });
             publication.parentPublicationUserName = filteredObj.username;
           }
         }
-        setDataPublication(data);
+        console.log("data");
+        setDataPublication(value.data);
       })
       .catch(err => {
         console.log("erreur : " + err);
       })
 
     //Récup les follower de l'user connecté
-    fetch(`${process.env.REACT_APP_API_URL}/user/follows/${cookies["userId"]}?page=0&size=10`,{
-      "method": "GET",
-      "headers": {
+    axios({
+      method: "GET",
+      url: `${process.env.REACT_APP_API_URL}/user/follows/${cookies["userId"]}?page=0&size=10`,
+      headers: {
         "Content-Type": "application/json",
       },
-    }).then((resp) => {return resp.json})
+      data: {"none":"none"}
+    })
       .then(async (value) => {
         const userIDFollower = await value.data.map((res) => res["userId"]);
         userWhoFollows = userIDFollower;
@@ -224,7 +223,7 @@ const ProfileUser = () => {
     getPubliFromUser();
     setLoading(false);
   }, [loading]);
-  
+
   if(loading) {
     return (
       <div>
