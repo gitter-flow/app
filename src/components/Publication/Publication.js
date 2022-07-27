@@ -233,7 +233,7 @@ const Publication = (props) => {
         </Box>
       </Modal>
       <ListItem alignItems="flex-start">
-        <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
+        <ListItemAvatar onClick={() => navigate(`/profile/${props.publisherUserId}`)} style={{"cursor": "pointer"}}>
           {
             selectedImage == "" &&
             <Avatar alt={props.author} src="/static/images/avatar/1.jpg" />

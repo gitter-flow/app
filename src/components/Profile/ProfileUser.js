@@ -8,9 +8,6 @@ import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import { useCookies } from 'react-cookie';
 import {useLocation} from 'react-router-dom';
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import CreateTeam from "./CreateTeam";
@@ -20,23 +17,17 @@ import Menu from "../../containers/Menu/Menu";
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
-import {useNavigate} from "react-router-dom";
-
-const style_modal = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 800,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
+import { useParams } from 'react-router-dom'
+import Loader from "../Loader/Loader";
+import useFetch from "../../services/UseFetch";
 
 
-const ProfileUser = ({route}) => {
-  const [cookies, setCookie, removeCookie] = useCookies(['user']);
-  const location = useLocation();
+
+const ProfileUser = () => {
+  const [cookies] = useCookies(['user']);
+  let [loading, setLoading] = React.useState(true);
+  let { userId } = useParams();
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -44,8 +35,9 @@ const ProfileUser = ({route}) => {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
   const [dataUser, setdataUser] = React.useState({
-    "id": "idUser",
+    "id": userId,
     "username": "",
     "numberOfFollowers": 0,
     "numberOfFollows": 0,
@@ -75,27 +67,65 @@ const ProfileUser = ({route}) => {
       "parentPublicationUserName": ""
     },
   ]);
-  let navigate = useNavigate();
-  const [userWhoFollows, setUserWhoFollows] = React.useState([]);
-  const [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState(null);
-  const [userId, setUserId] = React.useState(null);
-  let followModule;
+  let [userWhoFollows, setUserWhoFollows] = React.useState([]);
+  let [userWhoFollowsUpdate, setuserWhoFollowsUpdate] = React.useState(false);
+  let [selectedImage, setSelectedImage] = React.useState(null);
+  const fetch = useFetch();
 
-  function getPicture(userId) {
-    axios({
-      method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/user/picture/${userId}`,
-      headers: {
+  function getUserDetails() {
+    fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`,{
+      "method": "GET",
+      "headers": {
         "Content-Type": "application/json",
       },
-      data: {"none": "none"}
     })
-      .then((data) => {
-        setSelectedImage(data.data);
+      .then(resp => {
+        return resp.json()
+      }).then(data => {
+          setdataUser(data);
       })
       .catch(err => {
         console.log("erreur : " + err);
+      })
+
+    fetch(`${process.env.REACT_APP_API_URL}/user/follows/${userId}?page=0&size=100`, {
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(resp => {
+        return resp.json()
+      })
+      .then((data) => {
+        if (data.length > 0) {
+          let userIds = data.map((data) => data["userId"]);
+          setUserWhoFollows(userIds);
+        } else {
+          setUserWhoFollows([]);
+        }
+        setuserWhoFollowsUpdate(!userWhoFollowsUpdate);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+      })
+  }
+
+  function getPicture(userId) {
+    fetch(`${process.env.REACT_APP_API_URL}/user/picture/${userId}`,{
+      "method": "GET",
+      "headers": {
+        "Content-Type": "application/json",
+      },
+    }).then(resp => {
+      return resp.json() 
+    })
+      .then((data) => {
+        setSelectedImage(data);
+      })
+      .catch(err => {
+        console.log("erreur : " + err);
+        setSelectedImage(null);
       })
   }
 
@@ -108,7 +138,7 @@ const ProfileUser = ({route}) => {
       selectedImage.name
     );
 
-    fetch(`${process.env.REACT_APP_API_URL}/user/picture/${cookies["userId"]}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/user/picture/${userId}`, {
       "headers": {
         "authorization": `Bearer ${cookies["keycloaktoken"]}`,
       },
@@ -116,23 +146,23 @@ const ProfileUser = ({route}) => {
       "method": "POST"
     });
 
-    getPicture(cookies["userId"]);
+    getPicture(userId);
 
     // axios.post(`${process.env.REACT_APP_API_URL}/user/picture/${cookies["userId"]}`, formData);
   };
 
-  async function getCodeFromPublication(codeId) {
+  function getCodeFromPublication(codeId) {
     let res;
-    await axios({
-      method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/code/${codeId}`,
-      headers: {
+    fetch(`${process.env.REACT_APP_API_URL}/code/${codeId}`,{
+      "method": "GET",
+      "headers": {
         "Content-Type": "application/json",
       },
-      data: {"none":"none"}
-    })
-      .then(value => {
-        res = value.data;
+    }).then(data => {
+      return data.json()
+      })
+      .then(data => {
+        res = data;
       })
       .catch(err => {
         console.log("erreur : " + err);
@@ -141,47 +171,44 @@ const ProfileUser = ({route}) => {
   }
 
   function getPubliFromUser() {
-    axios({
-      method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/publication/user/${userId}?page=0&size=10`,
-      headers: {
+    fetch(`${process.env.REACT_APP_API_URL}/publication/user/${userId}?page=0&size=10`,{
+      "method": "GET",
+      "headers": {
         "Content-Type": "application/json",
       },
-      data: {"none":"none"}
-    })
-      .then(async (value) => {
-        for (let publication of value.data) {
+    }).then((resp) => {
+      return resp.json()
+      })
+      .then((data) => {
+        for (let publication of data) {
           if (publication.codeId != null)
-            await getCodeFromPublication(publication.codeId).then(res => {
+            getCodeFromPublication(publication.codeId).then(res => {
               publication.code = res
             });
 
           if (publication.parentPublicationId) {
-
-            var filteredObj = value.data.find(function(item, i){
+            var filteredObj = data.find(function(item, i){
               if(publication.parentPublicationId === item.parentPublicationId){
                 return i;
               }
+              return null;
             });
             publication.parentPublicationUserName = filteredObj.username;
           }
         }
-
-        setDataPublication(value.data);
+        setDataPublication(data);
       })
       .catch(err => {
         console.log("erreur : " + err);
       })
 
     //Récup les follower de l'user connecté
-    axios({
-      method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/user/follows/${cookies["userId"]}?page=0&size=10`,
-      headers: {
+    fetch(`${process.env.REACT_APP_API_URL}/user/follows/${cookies["userId"]}?page=0&size=10`,{
+      "method": "GET",
+      "headers": {
         "Content-Type": "application/json",
       },
-      data: {"none":"none"}
-    })
+    }).then((resp) => {return resp.json})
       .then(async (value) => {
         const userIDFollower = await value.data.map((res) => res["userId"]);
         userWhoFollows = userIDFollower;
@@ -191,70 +218,20 @@ const ProfileUser = ({route}) => {
       })
   }
 
-  const loadFromLocalStorage = () => {
-    try {
-      const stateStr = window.localStorage.getItem('userId');
-      setUserId(stateStr ? JSON.parse(stateStr).userId : undefined);
-      return stateStr ? JSON.parse(stateStr) : undefined;
-    } catch (e) {
-      console.error(e);
-      setUserId(undefined);
-      return undefined;
-    }
-  };
-
-
   useEffect(() => {
-    const temp = loadFromLocalStorage();
-    if (temp == null || temp == undefined || (location.state != undefined && location.state.userId != temp)) {
-      window.localStorage.setItem('userId', JSON.stringify(location.state));
-    }
-    console.log("location state : ");
-    console.log(location.state);
-    getPubliFromUser(userId);
+    getUserDetails()
     getPicture(userId);
-    // if (location.state) {
-      axios({
-        method: "GET",
-        url: `${process.env.REACT_APP_API_URL}/user/${userId}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {"none":"none"}
-      })
-        .then(value => {
-          setdataUser(value.data);
-        })
-        .catch(err => {
-          console.log("erreur : " + err);
-        })
-
-      axios({
-        method: "GET",
-        url: `${process.env.REACT_APP_API_URL}/user/follows/${cookies["userId"]}?page=0&size=100`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {"none":"none"}
-      })
-        .then((value) => {
-          if (value.data.length > 0) {
-            let userIds = value.data.map((data) => data["userId"]);
-            setUserWhoFollows(userIds);
-          } else {
-            setUserWhoFollows([]);
-          }
-          setuserWhoFollowsUpdate(!userWhoFollowsUpdate);
-        })
-        .catch(err => {
-          console.log("erreur : " + err);
-        })
-    // } else {
-    //   navigate("/");
-    // }
-
-  }, [userId]);
-
+    getPubliFromUser();
+    setLoading(false);
+  }, [loading]);
+  
+  if(loading) {
+    return (
+      <div>
+        <Loader/>
+      </div>
+    );
+  }
 
   return (
     <div>
