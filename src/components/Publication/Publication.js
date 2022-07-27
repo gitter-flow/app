@@ -67,7 +67,7 @@ const Publication = (props) => {
   const [openRepublish, setOpenRepublish] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [code, setCode] = React.useState(null);
-  const [selectedVersion, setSelectedVersion] = React.useState(props.versions[props.versions.length - 1]);
+  const [selectedVersion, setSelectedVersion] = React.useState(props.versions ? props.versions[props.versions.length - 1] : null);
   const [updateKey, setUpdateKey] = React.useState(0);
   const [like, setLike] = React.useState(true);
   const [numberLike, setnumberLike] = React.useState("0");
@@ -233,7 +233,7 @@ const Publication = (props) => {
         </Box>
       </Modal>
       <ListItem alignItems="flex-start">
-        <ListItemAvatar onClick={() => navigate(`/profile`, {state:{userId: props.publisherUserId}})} style={{"cursor": "pointer"}}>
+        <ListItemAvatar onClick={() => navigate(`/profile/${props.publisherUserId}`)} style={{"cursor": "pointer"}}>
           {
             selectedImage == "" &&
             <Avatar alt={props.author} src="/static/images/avatar/1.jpg" />
@@ -309,7 +309,7 @@ const Publication = (props) => {
           />
         </List>
         {
-          dataCommentary.length !== 0 &&
+          dataCommentary && dataCommentary.length !== 0 &&
             <div>
               {dataCommentary.map((curr, index) => {return (<Item class={"item-commentary"}><Commentary key={curr} commentId={curr.id} publisherUserId={curr.userId} like={curr.likes.length.toString()} img={""} author={curr.username} content={curr.content}/></Item>)})}
             </div>

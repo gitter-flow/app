@@ -32,7 +32,7 @@ const AppRouter = () => {
                             element={<PrivateRoute>
                                 <Search/>
                             </PrivateRoute>}/>
-                <Route exact path='/profile'
+                <Route exact path='/profile/:userId'
                        element={<PrivateRoute>
                          <ProfileUser/>
                        </PrivateRoute>}/>
